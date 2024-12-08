@@ -1,0 +1,121 @@
+/* General Reset */
+body, h1, h2, ul, li, a, form, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Fixed Header */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #007bff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    height: 60px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-header h1 {
+    flex: 1;
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Hamburger Button */
+.toggle-button {
+    background: #0056b3;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 1rem;
+    z-index: 1100;
+}
+
+.toggle-button:hover {
+    background: #003d80;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    left: -250px;
+    top: 60px; /* Below the fixed header */
+    height: calc(100% - 60px); /* Adjust for the header height */
+    width: 250px;
+    background: #f8f9fa;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style: none;
+    flex: 1;
+}
+
+.sidebar ul li {
+    margin: 1rem 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background: #e9ecef;
+}
+
+/* Logout Form */
+.logout-form {
+    margin-top: auto;
+}
+
+.logout-form button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.logout-form button:hover {
+    background: #0056b3;
+}
+
+/* Main Content */
+.main-content {
+    padding: 2rem;
+    margin-top: 60px; /* Adjust for the fixed header height */
+    transition: margin-left 0.3s ease-in-out;
+}

@@ -1,0 +1,17 @@
+/* index.css */
+
+#app {
+    margin-top: 1rem; 
+    padding: 2rem;
+    background-color: #f0f8ff;
+    text-align: center;
+}
+
+.logo2{
+    max-width: 700px;
+    height: 500px;
+}
+
+h1 {
+    color: #2E8B57;
+}

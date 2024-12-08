@@ -1,0 +1,12 @@
+/* auction.css */
+
+#app {
+    margin-top: 1rem;
+    padding: 2rem;
+    background-color: #fafad2;
+    text-align: center;
+}
+
+h2 {
+    color: #ff8c00;
+}

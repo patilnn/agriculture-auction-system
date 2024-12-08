@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Auction System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+
+<body>
+    <!-- Include header -->
+    <div id="header"></div>
+
+    <main>
+        <div class="container">
+            <!-- Registration Form Section -->
+            <div id="registrationSection" class="form-section">
+                <div class="info">
+                    <h2>Get exclusive access to the Agricultural Auction System</h2>
+                    <p>Register to join our platform and start auctioning your agricultural products to buyers.</p>
+                    <div class="social-login">
+                        <button>Register with Facebook</button>
+                        <button>Register with Google</button>
+                    </div>
+                </div>
+                <div class="form">
+                    <p>Already have an account? <a href="#" id="toggleLogin">Log In</a></p>
+                    <h2>Register</h2>
+                    <form action="/authUser/register" method="POST" id="registrationForm">
+                        <input type="text" name="name" id="regName" placeholder="Name" required>
+                        <input type="email" name="email" id="regEmail" placeholder="Email" required>
+                        <input type="password" name="password" id="regPassword" placeholder="Password" required>
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Login Form Section -->
+            <div id="loginSection" class="form-section hidden">
+                <div class="info">
+                    <h2>Welcome Back</h2>
+                    <p>Login to access your account and start bidding or selling your products.</p>
+                    <div class="social-login">
+                        <button>Login with Facebook</button>
+                        <button>Login with Google</button>
+                    </div>
+                </div>
+                <div class="form">
+                    <p>Don't have an account? <a href="#" id="toggleRegister">Create Profile</a></p>
+                    <h2>Login</h2>
+                    <form action="/authUser/login" method="POST" id="loginForm">
+                        <input type="email" name="email" id="loginEmail" placeholder="Email" required>
+                        <input type="password" name="password" id="loginPassword" placeholder="Password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include footer -->
+    <div id="footer"></div>
+
+    <script>
+        // Toggle between Registration and Login sections
+        document.getElementById('toggleLogin').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('registrationSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        });
+
+        document.getElementById('toggleRegister').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registrationSection').classList.remove('hidden');
+        });
+
+        // Optional: Include custom fetch handling for form submissions if necessary
+        // Registration and login are already handled server-side by POST methods
+
+        // Registration
+        document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+            //Purpose: Prevents the default form submission behavior (e.g., page reload) to allow custom JavaScript handling.
+            event.preventDefault();
+
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                //fetch: Sends an HTTP POST request to the /auth/register endpoint.
+                //Headers: Specifies the Content-Type as application/json to indicate the request body contains JSON data.
+                //body: Converts the name, email, and password fields into a JSON string using JSON.stringify.
+                const response = await fetch('/authUser/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                } else {
+                    alert('Registration failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/authUser/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Redirect to the specified URL
+                    if (data.redirectUrl) {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    alert('Login failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
+    </script>
+    <script src="/js/scripts.js"></script>
+</body>
+
+</html>
