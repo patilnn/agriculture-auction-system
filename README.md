@@ -34,21 +34,17 @@ Core Features of the Auction System:
 ________________________________________________________________________________________________________________
 Technologies Used:
 
-•	Frontend: HTML, CSS, JavaScript (for dynamic content), AJAX (for real-time bidding updates)
-
-•	Backend: Node.js with Express (for server-side logic), MySQL (for database management), and authentication with Passport.js or JWT (for secure login).
-
-•	Additional Tools: Git for version control, and GitHub for repository management.
+•	Frontend: HTML, CSS, JavaScript (for dynamic content), AJAX (for real-time bidding updates)<br>
+•	Backend: Node.js with Express (for server-side logic), MySQL (for database management), and authentication with Passport.js or JWT (for secure login).<br>
+•	Additional Tools: Git for version control, and GitHub for repository management.<br>
 ________________________________________
 Target Users:
-1.	Buyers who are looking to acquire items through bidding.
-2.	Sellers who wish to auction their products to the highest bidder.
-3.	Admins who monitor and manage the auction system and users.
+1.	Buyers who are looking to acquire items through bidding.<br>
+2.	Sellers who wish to auction their products to the highest bidder.<br>
+3.	Admins who monitor and manage the auction system and users.<br>
 ________________________________________
 Benefits of the Auction System:
 
-• For Sellers: Reach a broader audience for their products and receive the highest market price through competitive bidding.
-
-•	For Buyers: Get access to a wide range of products, often at discounted rates, by placing competitive bids.
-
+• For Sellers: Reach a broader audience for their products and receive the highest market price through competitive bidding.<br>
+•	For Buyers: Get access to a wide range of products, often at discounted rates, by placing competitive bids.<br>
 •	For Administrators: A streamlined system for managing auctions, users, and transactions securely and efficiently.
