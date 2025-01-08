@@ -1,17 +1,244 @@
 /* index.css */
+.slideshow-container {
+    margin-top: 4rem;
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    /* overflow: hidden;
+    border-radius: 15px; */
+}
+.slides {
+    display: none;
+    width: 100%;
+    height: 80vh; /* Adjust height as needed */
+    object-fit: cover; /* Ensure the image fits properly */
+}
+.active {
+    display: block;
+}
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.prev {
+    left: 10px;
+}
+.next {
+    right: 10px;
+}
+.dots-container {
+    position: absolute;
+    bottom: 5%; /* Position dots slightly above the image bottom */
+    width: 100%;
+    text-align: center;
+}
+.dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: rgba(255, 255, 255, 0.4); /* Transparent dots */
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+.dot.active {
+    background-color: rgba(255, 255, 255, 0.9); /* Brighter active dot */
+}
 
-#app {
-    margin-top: 1rem; 
-    padding: 2rem;
-    background-color: #f0f8ff;
+
+
+
+/* Container for about section */
+#about {
+    margin-top: 0rem; 
+    padding: 50px;
+    padding-top: 5rem;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+/* Flex container for aligning text and image */
+.about-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+}
+/* Style for text section */
+.about-content .text {
+    flex: 2;
+    text-align: left;
+    padding: 20px;
+}
+/* Style for image */
+.about-content .image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+/* Image styling */
+.about-content .image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+
+
+
+
+
+
+#contact {
+    padding: 50px;
+    background-color: #f9f9f9;
     text-align: center;
 }
 
-.logo2{
-    max-width: 700px;
-    height: 500px;
+#contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
 }
+
+#contact p {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+.contact-form-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-form-container:before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: #4CAF50;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.2;
+}
+
+.contact-form-container h2 {
+    font-size: 1.8rem;
+    color: #34495e;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    font-size: 1rem;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.form-group textarea {
+    height: 150px;
+    resize: none;
+}
+
+.form-group button {
+    background: linear-gradient(to right, #4CAF50, #2ECC71);
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-group button:hover {
+    background: linear-gradient(to right, #2ECC71, #27AE60);
+    transform: translateY(-2px);
+}
+
+.form-group .error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Optional: Add animation */
+.contact-form-container input,
+.contact-form-container textarea {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.contact-form-container:after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: #4CAF50;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.2;
+}
+
+
+
 
 h1 {
     color: #2E8B57;
+}
+h2 {
+    color: #4682b4;
 }

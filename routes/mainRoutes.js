@@ -1,3 +1,4 @@
+// public/routes/mainRoutes.js
 const express = require('express');
 const router = express.Router();
 
@@ -23,12 +24,15 @@ router.get('/auction', (req, res) => {
 
 // Contact Page
 router.get('/contact', (req, res) => {
-    res.render('contact');
+    res.sendFile(path.join(__dirname, 'views', 'index.ejs')); // Serve the about.html file
 });
 
 // Contact Page
 router.get('/about', (req, res) => {
     res.render('about');
 });
+// router.get('/about', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'index.ejs')); // Serve the about.html file
+// });
 
 module.exports = router;

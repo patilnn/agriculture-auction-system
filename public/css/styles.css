@@ -5,18 +5,25 @@
     box-sizing: border-box;
 }
 
-/* body {
+body{
+    background-color:darkkhaki;
+}
+
+head {
     font-family: Arial, sans-serif;
-} */
+    line-height: 1.6;
+}
 
 /* Header Styling */
 header {
-    /* display: flex; */
-    align-items: center; /* Vertically center the items */
-    background-color: #953ae9;
-    color: #fff;
-    padding: 1rem 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Keeps the navbar visible during scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensures navbar is above all other elements */
+    background-color: #333;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 header .container {
@@ -25,42 +32,62 @@ header .container {
     justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0.5rem 1rem;
 }
 
-/* Logo styling */
+/* Logo Styling */
 .logo {
-    width: 50px;  /* Adjust width for a small logo */
-    height: 50px; /* Adjust height to match width */
-    border-radius: 50%; /* Makes it an oval shape */
-    margin-right: 10px; /* Space between logo and title */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 1rem;
 }
 
+/* Title Styling */
 header h1 {
     font-size: 1.5rem;
     color: white;
-    margin-right: auto;
 }
 
-header nav ul {
-    list-style-type: none;
+/* Navbar Styling */
+nav ul {
+    list-style: none;
     display: flex;
-    gap: 15px;
+    gap: 1.5rem;
 }
 
-header nav ul li {
-    margin-left: 1.5rem;
-}
-
-header nav ul li a {
-    color: #fff;
+nav ul li a {
     text-decoration: none;
+    color: white;
     font-size: 1rem;
     transition: color 0.3s ease;
 }
 
-header nav ul li a:hover {
+nav ul li a:hover {
     color: #d9f3ef;
+}
+
+/* Content Spacing to Prevent Overlap */
+main {
+    margin-top: 80px; /* Adjust based on navbar height */
+    padding: 1rem;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Footer Styling */
+footer {
+    background-color:gray;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 0rem;
+}
+
+footer p {
+    margin: 0;
 }
 
 /* Responsive Design */
@@ -70,48 +97,9 @@ header nav ul li a:hover {
         text-align: center;
     }
 
-    header nav ul {
-        flex-direction: column;
-        margin-top: 1rem;
-    }
-
-    header nav ul li {
-        margin: 0.5rem 0;
-    }
-}
-
-/* Footer Styling */
-footer {
-    background-color: #333;
-    color: white;
-    padding: 1rem 0;
-    text-align: center;
-    margin-top: 2rem;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-}
-
-footer a {
-    color: #ddd;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-footer a:hover {
-    color: #fff;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 1.5rem;
-    }
-
     nav ul {
         flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    nav ul li a {
-        font-size: 0.9rem;
+        gap: 1rem;
+        margin-top: 1rem;
     }
 }

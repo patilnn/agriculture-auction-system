@@ -2,9 +2,10 @@
 /* Header Styling */
 main {
     background-color:antiquewhite;
-    margin-top: 1rem;
+    margin-top: 4rem;
     padding: 1rem 1rem;
     display: flex;
+    gap: 20px;
     justify-content: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -95,7 +96,7 @@ main .form-section {
 }
 
 .form button:hover {
-    background-color: #3b7a68;
+    background-color:brown;
 }
 
 /* Social Login */
