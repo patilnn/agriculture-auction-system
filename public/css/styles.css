@@ -6,11 +6,8 @@
 }
 
 body{
-<<<<<<< HEAD
-    background-color:darkkhaki;
-=======
     background-color:#f4f4f4;
->>>>>>> 0c2bdc9 (CU pages)
+
 }
 
 head {
@@ -20,20 +17,13 @@ head {
 
 /* Header Styling */
 header {
-<<<<<<< HEAD
     position: fixed; /* Keeps the navbar visible during scroll */
     top: 0;
     left: 0;
-    width: 100%;
     z-index: 1000; /* Ensures navbar is above all other elements */
-    background-color: #333;
-=======
     width: 100%;
     position: fixed; /* Keeps the navbar visible during scroll */
-    left: 0;
-    z-index: 1000; /* Ensures navbar is above all other elements */
     background: rgba(0, 0, 0, 0.2);
->>>>>>> 0c2bdc9 (CU pages)
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -92,16 +82,13 @@ html {
 /* Footer Styling */
 footer {
     background-color:gray;
-<<<<<<< HEAD
     color: white;
     text-align: center;
     padding: 1rem 0;
     margin-top: 0rem;
-=======
     color: black;
     text-align: center;
     padding: 1rem 0;
->>>>>>> 0c2bdc9 (CU pages)
 }
 
 footer p {

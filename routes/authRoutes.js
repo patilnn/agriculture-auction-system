@@ -4,9 +4,9 @@ const db = require('../db'); // Database connection
 const router = express.Router();
 
 // Render Admin Login Page
-router.get('/admin_login', (req, res) => {
-    res.render('admin_login'); // EJS template for admin login
-});
+// router.get('/admin_login', (req, res) => {
+//     res.render('admin_login'); // EJS template for admin login
+// });
 
 // Handle Admin Login
 router.post('/admin_login', (req, res) => {

@@ -24,15 +24,8 @@ router.get('/auction', (req, res) => {
     res.render('auction');
 });
 
-<<<<<<< HEAD
-// Contact Page
-router.get('/contact', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.ejs')); // Serve the about.html file
-=======
-// Route for rendering the contact form page (index.ejs)
 router.get('/contactus', (req, res) => {
   res.render('contactus'); // Renders the index.ejs page (already has the contact form)
->>>>>>> 0c2bdc9 (CU pages)
 });
 
 // Handle the contact form submission
@@ -67,8 +60,5 @@ router.post('/contactus', (req, res) => {
     }
   );
 });
-// router.get('/about', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'views', 'index.ejs')); // Serve the about.html file
-// });
 
 module.exports = router;

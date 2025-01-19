@@ -1,31 +1,17 @@
-<<<<<<< HEAD
 /* index.css */
-.slideshow-container {
-    margin-top: 4rem;
-    position: relative;
-    max-width: 100%;
-    width: 100%;
-    /* overflow: hidden;
-    border-radius: 15px; */
-=======
-/* Slideshow Styles */
 .slideshow-container {
     margin-top: 0rem;
     position: relative;
     max-width: 100%;
     width: 100%;
->>>>>>> 0c2bdc9 (CU pages)
+    /* overflow: hidden;
+    border-radius: 15px; */
 }
 .slides {
     display: none;
     width: 100%;
-<<<<<<< HEAD
-    height: 80vh; /* Adjust height as needed */
+    height: 70%; /* Adjust height as needed */
     object-fit: cover; /* Ensure the image fits properly */
-=======
-    height: 70%;
-    object-fit: cover;
->>>>>>> 0c2bdc9 (CU pages)
 }
 .active {
     display: block;
@@ -34,11 +20,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-<<<<<<< HEAD
     background-color: rgba(0, 0, 0, 0.5);
-=======
-    background-color: rgba(0, 0, 0, 0.6);
->>>>>>> 0c2bdc9 (CU pages)
     color: white;
     padding: 10px 15px;
     border: none;
@@ -53,7 +35,6 @@
 }
 .dots-container {
     position: absolute;
-<<<<<<< HEAD
     bottom: 5%; /* Position dots slightly above the image bottom */
     width: 100%;
     text-align: center;
@@ -71,25 +52,21 @@
     background-color: rgba(255, 255, 255, 0.9); /* Brighter active dot */
 }
 
-
-
-
 /* Container for about section */
 #about {
-    margin-top: 0rem; 
-    padding: 50px;
-    padding-top: 5rem;
-    background-color: #f4f4f4;
+    padding-top: 2rem;
+    background-color: azure;
     text-align: center;
 }
 /* Flex container for aligning text and image */
 .about-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 50px; /* Add space between flex items */
+    flex-wrap: wrap; /* Ensure proper responsiveness */
+    padding: 50px;
+    text-align: left;
 }
 /* Style for text section */
 .about-content .text {
@@ -97,6 +74,15 @@
     text-align: left;
     padding: 20px;
 }
+
+.about-content .text h1{
+    color: #27AE60;
+}
+
+.about-content .text h2{
+    color:blue;
+}
+
 /* Style for image */
 .about-content .image {
     flex: 1;
@@ -110,10 +96,22 @@
     border-radius: 8px;
 }
 
+/* Container for contact section */
 #contact {
+    display: flex;
+    flex-wrap: wrap; /* Ensure proper responsiveness */
+    justify-content: center;
+    align-items: flex-start;
     padding: 50px;
-    background-color: #f9f9f9;
-    text-align: center;
+    padding-top: 5rem;
+    gap: 50px; /* Add space between flex items */
+    background-color:beige;
+    text-align: left; /* Align text left for better readability */
+}
+
+#contact > div {
+    flex: 1 1 400px; /* Allow equal space, minimum 400px width */
+    max-width: 50%; /* Prevent items from taking too much space */
 }
 
 #contact h2 {
@@ -138,7 +136,6 @@
     position: relative;
     overflow: hidden;
 }
-
 .contact-form-container:before {
     content: '';
     position: absolute;
@@ -247,141 +244,124 @@
 }
 
 
-
-
-h1 {
-    color: #2E8B57;
-=======
-    bottom: 10%;
+.containe {
+    padding-top: 3rem;
+    min-height: 80vh; /* Reduced height */
     width: 100%;
-    text-align: center;
-}
-.dot {
-    height: 12px;
-    width: 12px;
-    margin: 0 5px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    display: inline-block;
-    cursor: pointer;
-}
-.dot.active {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-/* About Section */
-#about {
-    padding: 3rem 1rem;
-    background-color: #f5f5f5;
-    text-align: center;
-}
-.about-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    flex-wrap: wrap;
-    padding: 2rem;
-}
-.about-content .text {
-    flex: 1;
-    text-align: left;
-    padding: 20px;
-}
-.about-content .text h1 {
-    color: #2c3e50;
-    font-size: 2.5rem;
-}
-.about-content .text h2 {
-    color: #16a085;
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-}
-.about-content .text p {
-    color: darkcyan;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-.about-content .image {
-    flex: 1;
+    background-color: #1c1c1c;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
-.about-content .image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Services Section */
 .service-wrapper {
-    padding: 4rem 2rem;
-    background-color: #1c1c1c;
-    color: white;
+    padding: 3% 6%; /* Reduced padding */
     text-align: center;
 }
+.service {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .service h1 {
-    color: #16a085;
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    color: #fff;
+    font-size: 2.5rem; /* Reduced font size */
+    letter-spacing: 1px;
+    margin-bottom: 15px; /* Reduced margin */
 }
 .service p {
-    font-size: 1.1rem;
-    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem; /* Reduced font size */
+    line-height: 1.5;
     max-width: 600px;
-    margin: 0 auto 2rem;
+    margin-bottom: 30px; /* Reduced margin */
 }
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* Reduced gap */
+    margin-top: 30px; /* Reduced margin */
 }
 .card {
-    background-color: rgba(255, 255, 255, 0.08);
-    padding: 1.5rem;
-    border-radius: 10px;
+    height: 280px; /* Reduced height */
+    width: 300px; /* Reduced width */
+    background-color: rgba(255, 255, 255, 0.07);
+    padding: 2% 6%; /* Reduced padding */
+    border-radius: 12px;
+    transition: transform 0.4s ease, background 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    transition: transform 0.3s, background-color 0.3s;
 }
-.card:hover {
-    background-color: #16a085;
-    transform: translateY(-10px);
+.card i {
+    color: crimson;
+    margin-top: 20px; /* Reduced margin */
+    margin-bottom: 10px; /* Reduced margin */
+    font-size: 2.5rem; /* Reduced font size */
+    transition: color 0.4s ease;
 }
 .card h2 {
-    color: white;
-    margin-bottom: 0.8rem;
+    color: #fff;
+    font-size: 1.3rem; /* Reduced font size */
+    margin: 10px 0;
+    font-weight: 600;
+    transition: color 0.4s ease;
 }
 .card p {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 1rem;
+    font-size: 0.9rem; /* Reduced font size */
+    margin-top: 10px;
+    line-height: 1.4;
+    transition: color 0.4s ease;
 }
-.card i {
-    font-size: 2rem;
-    color: #16a085;
-    margin-bottom: 1rem;
+.card:hover {
+    background: linear-gradient(90deg, #d40442, #f35500);
+    transform: translateY(-8px); /* Reduced hover effect */
 }
 .card:hover i {
-    color: white;
+    color: #fff;
 }
-
-/* Responsive Design */
+.card:hover h2 {
+    color: #fff;
+}
+.card:hover p {
+    color: rgba(255, 255, 255, 1);
+}
+@media (max-width: 1200px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+    h1 {
+        font-size: 2rem; /* Reduced font size */
+    }
+}
 @media (max-width: 768px) {
-    #about .about-content {
-        flex-direction: column;
+    h1 {
+        font-size: 1.8rem; /* Reduced font size */
     }
-    .service h1 {
-        font-size: 2rem;
+    p {
+        font-size: 0.9rem; /* Reduced font size */
+        padding: 0 8px;
     }
-    .service p {
-        font-size: 1rem;
-    }
-    .card {
-        padding: 1rem;
-    }
->>>>>>> 0c2bdc9 (CU pages)
 }
-h2 {
-    color: #4682b4;
+@media (max-width: 500px) {
+    .card {
+        height: 240px; /* Reduced height */
+        width: 280px; /* Reduced width */
+    }
+    .card i {
+        margin-top: 15px; /* Reduced margin */
+    }
+    h1 {
+        margin-bottom: 20px; /* Reduced margin */
+        font-size: 1.6rem; /* Reduced font size */
+    }
+    p {
+        font-size: 0.85rem; /* Reduced font size */
+    }
 }

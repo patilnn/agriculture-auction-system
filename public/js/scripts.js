@@ -14,9 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(html => document.getElementById('footer').innerHTML = html)
         .catch(error => console.error('Error loading footer:', error));
     
-
-
-
     // Slideshow functionality
     let slideIndex = 1;
     let slideInterval;
@@ -101,9 +98,4 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reset();
         }
     });
-<<<<<<< HEAD
-
-=======
- 
->>>>>>> 0c2bdc9 (CU pages)
 });

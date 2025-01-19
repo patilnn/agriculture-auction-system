@@ -2,11 +2,7 @@
 /* Header Styling */
 main {
     background-color:antiquewhite;
-<<<<<<< HEAD
-    margin-top: 4rem;
-=======
     margin-top: 0rem;
->>>>>>> 0c2bdc9 (CU pages)
     padding: 1rem 1rem;
     display: flex;
     gap: 20px;
