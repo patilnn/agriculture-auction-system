@@ -4,70 +4,19 @@
     <title>Home</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
     <div id="header"></div>
-
-    <div class="slideshow-container">
-        <!-- Images for the slideshow -->
-        <img src="img/agriImg1.jpg" class="slides" alt="Slide 1">
-        <img src="img/agriImg2.jpg" class="slides" alt="Slide 2">
-        <img src="img/agriImg3.jpg" class="slides" alt="Slide 3">
-        <img src="img/agriImg4.jpg" class="slides" alt="Slide 4">
-        <img src="img/agriImg5.jpg" class="slides" alt="Slide 5">
-        <img src="img/agriImg6.jpg" class="slides" alt="Slide 6">
-        <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
-        <button class="next" onclick="changeSlide(1)">&#10095;</button>
-        <div class="dots-container"></div>
-    </div>
-
-    <div id="about">
-        <div class="about-content">
-            <div class="text">
-                <h2>About Us</h2><br><br>
-                <p>Information about the Agricultural Auction System.</p><br><br>
-                <h1>Welcome to the Agricultural Auction System</h1><br><br>
-                <p>This platform allows farmers to auction their products to buyers.</p>
-                <p>Register now to start participating in auctions!</p><br><br>
-                <a href="/authUser/register">
-                    <button style="padding: 10px 20px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
-                        Register Now
-                    </button>
-                </a>
-            </div>
-            <div class="image">
-                <img src="img/logo2.jpg" alt="Logo" class="logo2">
-            </div>
-        </div>
-    </div>
-    
-    <div id="contact">
-        <h1>Contact Us</h1>
-        <p>Contact information and form.</p>
-        <div class="contact-form-container">
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
-                    <span class="error" id="nameError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                    <span class="error" id="emailError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <input type="text" id="subject" name="subject" placeholder="Enter the subject" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" placeholder="Write your message here" required></textarea>
-                </div>
-                <div class="form-group">
-                    <button type="submit">Send Message</button>
-                </div>
-            </form>
-        </div>
+    <div id="app">
+        <img src="img/logo2.jpg" alt="Logo" class="logo2">
+        <h1>Welcome to the Agricultural Auction System</h1>
+        <p>This platform allows farmers to auction their products to buyers.</p>
+        <p>Register now to start participating in auctions!</p>
+        <a href="/authUser/register">
+            <button style="padding: 10px 20px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
+                Register Now
+            </button>
+        </a>
     </div>
     <div id="footer"></div>
     <script src="js/scripts.js"></script>

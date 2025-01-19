@@ -20,8 +20,8 @@ const db = require('./db');
 
 // Routes
 const mainRoutes = require('./routes/mainRoutes');
-const authRoutesU = require('./routes/authRoutesU');
-const authRoutes = require('./routes/authRoutes');
+const authRoutesU = require('./routes/authRoutesU'); //User Authentication
+const authRoutes = require('./routes/authRoutes'); //Admin Authentication
 
 app.use('/', mainRoutes);
 app.use('/authUser', authRoutesU);

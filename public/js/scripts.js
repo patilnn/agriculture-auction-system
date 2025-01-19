@@ -101,5 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reset();
         }
     });
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 0c2bdc9 (CU pages)
 });

@@ -11,7 +11,7 @@
     <!-- Fixed Header -->
     <header class="fixed-header">
         <button id="sidebarToggle" class="toggle-button">&#9776;</button>
-        <h1>Welcome to Your Dashboard</h1>
+        <h2>Welcome, <%= name %>!</h2>
     </header>
 
     <!-- Sidebar -->
@@ -20,7 +20,7 @@
             <!-- <li><a href="dashboard-user">Home</a></li> -->
             <li><a href="/authUser/user/dashboard-user">Home</a></li>
             <!-- <li><a href="make_auction">Make Auction</a></li> -->
-            <li><a href="make_auction">Make Auction</a></li>
+            <li><a href="#">Make Auction</a></li>
             <li><a href="#">Profile-Status</a></li>
         </ul>
         <form action="/authUser/logout" method="POST" class="logout-form">
@@ -30,9 +30,8 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <h2>Welcome, <%= name %>!</h2>
+        <h1>Welcome to Your Dashboard</h1>
         <p>Your dashboard content goes here.</p>
-
         <h1>Create Auction</h1>
         <form action="/authUser/make_auction" method="POST" id="auctionForm">
             <div>
