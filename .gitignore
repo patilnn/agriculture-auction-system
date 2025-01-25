@@ -19,6 +19,7 @@ coverage
 # Dependency directories
 node_modules/
 jspm_packages/
+img2/
 
 # Typescript compiled output
 dist/

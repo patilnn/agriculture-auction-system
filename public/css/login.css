@@ -2,8 +2,9 @@
 /* Header Styling */
 main {
     background-color:antiquewhite;
-    margin-top: 0rem;
+    margin-top: 0;
     padding: 1rem 1rem;
+    padding-top: 5rem;
     display: flex;
     gap: 20px;
     justify-content: center;

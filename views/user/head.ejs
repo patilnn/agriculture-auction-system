@@ -1,0 +1,38 @@
+<!-- views/user/head.ejs -->
+<header class="fixed-header">
+    <button id="sidebarToggle" class="toggle-button">&#9776;</button>
+    <h2>Welcome, <%= id + " " + name %>!</h2>
+</header>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <ul id="sidebar-options">
+        <li><a href="/userDashboard/user/dashboard_user">Home</a></li>
+        <li><a href="/userDashboard/user/make_auction">Make Auction</a></li>
+        <li><a href="/userDashboard/user/profile">Profile</a></li>
+    </ul>
+    <form action="/userDashboard/logout" method="POST" class="logout-form">
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<!-- Inline JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+
+            // Toggle the sidebar
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+                if (mainContent) mainContent.style.marginLeft = '0';
+            } else {
+                sidebar.style.left = '0px';
+                if (mainContent) mainContent.style.marginLeft = '220px';
+            }
+        });
+    });
+</script>
+</script>

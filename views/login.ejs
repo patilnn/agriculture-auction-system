@@ -1,6 +1,6 @@
+<!-- login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,23 @@
     <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="/css/admin_login.css">
 </head>
-
-    <!-- Include header -->
-    <div id="header"></div>
+<body>
+    <head>
+        <header>
+            <div class="container">
+                <img src="../img/logo1.jpg" alt="Logo" class="logo">
+                <h1>Agricultural Auction System</h1>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/auction">Auctions</a></li>
+                        <li><a href="/authUser/login">Login</a></li>
+                        <li><a href="#">Term and Condition</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>            
+    </head>
 
     <main>
         <div class="container">
@@ -27,7 +41,7 @@
                 </div>
                 <div class="form">
                     <p>Already have an account? <a href="#" id="toggleLogin">Log In</a></p>
-                    <h2>Register</h2>
+                    <h2> User Register Only</h2>
                     <form action="/authUser/register" method="POST" id="registrationForm">
                         <input type="text" name="name" id="regName" placeholder="Name" required>
                         <input type="email" name="email" id="regEmail" placeholder="Email" required>

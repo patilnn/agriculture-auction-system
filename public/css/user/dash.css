@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    min-height: 100vh;
+    position: relative;
+}
+.main{
+    margin-top: 5rem;
+}

@@ -1,0 +1,70 @@
+<!-- views/user/profile.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Auction</title>
+    <link rel="stylesheet" href="/css/user/head.css"> <!-- Including dashboard styles -->
+    <link rel="stylesheet" href="/css/user/profile.css">
+</head>
+<body>
+    <!-- Include the dashboard header -->
+    <%- include('/pro2/views/user/head') %>
+
+    <div class="container" id="main-content">
+        <h1>Welcome, <%= user.name %></h1>
+        
+        <% if (user.profile_completed == false) { %>
+            <form action="/userDashboard/user/profile" method="POST">
+                <label for="mobile">Mobile:</label>
+                <input type="text" name="mobile" id="mobile" value="<%= user.mobile %>" required>
+                <label for="PAN_number">PAN Number:</label>
+                <input type="text" name="PAN_number" id="PAN_number" value="<%= user.PAN_number %>">
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="<%= user.city %>">
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state" value="<%= user.state %>">
+                <label for="nation">Nation:</label>
+                <input type="text" name="nation" id="nation" value="<%= user.nation %>">
+                <button type="submit">Submit</button>
+            </form>
+        <% } else { %>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td><%= user.name %></td>                    
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><%= user.email %></td>                    
+                </tr>
+                <tr>
+                    <td>Mobile</td>
+                    <td><%= user.mobile %></td>
+                </tr>
+                <tr>
+                    <td>PAN Number</td>
+                    <td><%= user.PAN_number %></td>
+                </tr>
+                <tr>
+                    <td>City</td>
+                    <td><%= user.city %></td>
+                </tr>
+                <tr>
+                    <td>State</td>
+                    <td><%= user.state %></td>
+                </tr>
+                <tr>
+                    <td>Nation</td>
+                    <td><%= user.nation %></td>
+                </tr>
+            </table>
+        <% } %>
+
+</body>
+</html>

@@ -16,49 +16,51 @@ router.get('/partials/footer', (req, res) => {
 
 // index Page
 router.get('/', (req, res) => {
-  res.render('index');
+  res.render('index',{
+    section: 'contact',
+    error: req.session.error,
+    message: req.session.message,
+  });
+});
+
+
+router.post('/', (req, res) => {
+  const { name, email, location, subject, msg } = req.body;
+
+  // Validate input
+  if (!name || !email || !msg) {
+      return res.render('index', { 
+          error: 'Name, Email, and msg are required fields!', 
+          message: undefined 
+      });
+  }
+
+  const query = `
+      INSERT INTO contactus (name, email, location, subject, msg) 
+      VALUES (?, ?, ?, ?, ?)
+  `;
+
+  // Execute the query
+  db.query(query, [name, email, location, subject, msg], (err, results) => {
+      if (err) {
+          console.error(err);
+          return res.render('index', { 
+              error: 'An error occurred while processing your request. Please try again.', 
+              message: undefined 
+          });
+      }
+
+      // Success response
+      res.render('index', { 
+          error: undefined, 
+          message: 'Your message has been sent successfully!' 
+      });
+  });
 });
 
 // Auction Page
 router.get('/auction', (req, res) => {
     res.render('auction');
-});
-
-router.get('/contactus', (req, res) => {
-  res.render('contactus'); // Renders the index.ejs page (already has the contact form)
-});
-
-// Handle the contact form submission
-router.post('/contactus', (req, res) => {
-  const { name, email, location, subject, message } = req.body;
-
-  // Validation: Ensure required fields are filled
-  if (!name || !email || !message) {
-    return res.render('contactus', {
-      error: 'Name, Email, and Message are required.',
-    });
-  }
-
-  // Insert the form data into the database (contactus table)
-  const sql =
-    'INSERT INTO contactus (name, email, location, subject, msg) VALUES (?, ?, ?, ?, ?)';
-  db.query(
-    sql,
-    [name, email, location, subject, message],
-    (err, result) => {
-      if (err) {
-        console.error('Error inserting data into database:', err.message);
-        return res.render('index', {
-          error: 'There was an error saving your message.',
-        });
-      }
-
-      // If successful, show a success message
-      res.render('contactus', {
-        message: 'Your message has been sent successfully.',
-      });
-    }
-  );
 });
 
 module.exports = router;

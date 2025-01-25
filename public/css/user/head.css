@@ -1,16 +1,9 @@
+/* head.css */
 /* General Reset */
-body, h1, h2, ul, li, a, form, button {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-    min-height: 100vh;
-    position: relative;
 }
 
 /* Fixed Header */
@@ -29,7 +22,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.fixed-header h1 {
+.fixed-header h2 {
     flex: 1;
     text-align: center;
     font-size: 1.5rem;
@@ -50,7 +43,11 @@ body {
 }
 
 .toggle-button:hover {
-    background: #003d80;
+    background: #4b93f9;
+}
+/* Do not override all buttons */
+button {
+    all: unset; /* Remove potential global styles */
 }
 
 /* Sidebar */
@@ -59,7 +56,7 @@ body {
     left: -250px;
     top: 60px; /* Below the fixed header */
     height: calc(100% - 60px); /* Adjust for the header height */
-    width: 250px;
+    width: 200px;
     background: #f8f9fa;
     box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
     overflow: auto;
@@ -68,6 +65,11 @@ body {
     padding: 1rem;
     display: flex;
     flex-direction: column;
+}
+
+/* When sidebar is open */
+.sidebar.open {
+    left: 0;
 }
 
 .sidebar ul {
@@ -79,6 +81,7 @@ body {
     margin: 1rem 0;
 }
 
+/* Sidebar links */
 .sidebar ul li a {
     text-decoration: none;
     color: #007bff;
@@ -111,11 +114,4 @@ body {
 
 .logout-form button:hover {
     background: #0056b3;
-}
-
-/* Main Content */
-.main-content {
-    padding: 2rem;
-    margin-top: 60px; /* Adjust for the fixed header height */
-    transition: margin-left 0.3s ease-in-out;
 }

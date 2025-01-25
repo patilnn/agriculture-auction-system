@@ -1,8 +1,7 @@
 const express = require('express');
-const mysql = require('mysql');
+const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
-const router = express.Router();
 
 const app = express();
 
@@ -12,19 +11,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 
+// Use body parser to handle POST data
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Setting EJS as templating engine
 app.set('view engine', 'ejs');
-
-// Database Connection
-const db = require('./db');
 
 // Routes
 const mainRoutes = require('./routes/mainRoutes');
 const authRoutesU = require('./routes/authRoutesU'); //User Authentication
+const userDash = require('./routes/userDash'); //User Dashboard
 const authRoutes = require('./routes/authRoutes'); //Admin Authentication
 
+//middelware
 app.use('/', mainRoutes);
 app.use('/authUser', authRoutesU);
+app.use('/userDashboard', userDash); // Include your route
 app.use('/authAdmin', authRoutes);
 
 // Error-handling middleware
