@@ -1,71 +1,171 @@
-/* profile.css */
+/* General Styling */
 body {
-    margin: 0;
-    padding: 0;
+    /* font-family: 'Arial', sans-serif; */
     background-color: #f4f4f9;
-    color: #333;
-    min-height: 100vh;
-    position: relative;
+    margin: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
+/* Main Container */
 .container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1 {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    margin-top: 5rem;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-form, table {
-    margin-top: 20px;
-    width: 100%;
+/* Header */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
 }
 
-form label {
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    text-align: left;
+    color: #555;
+}
+/* ----------------------------------------------------------- */
+/* Style for the label */
+label[for="user_type"] {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
     display: block;
-    margin-top: 10px;
+    margin-bottom: 8px;
 }
 
-form input {
+/* Style for the select dropdown */
+select#user_type {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    outline: none;
 }
 
+/* Hover effect */
+select#user_type:hover {
+    border-color: #0056b3;
+}
+
+/* Focus effect */
+select#user_type:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+}
+
+/* Dropdown options */
+select#user_type option {
+    font-size: 14px;
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Disabled option (if needed in future) */
+select#user_type option:disabled {
+    color: #aaa;
+}
+/* ---------------------------------------------------------- */
+
+/* Input Fields */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+/* Input Focus Effect */
+input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Submit Button */
 button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
+    background: #007bff;
     color: white;
+    padding: 12px 20px;
+    font-size: 16px;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background: #0056b3;
+    transform: scale(1.05);
 }
 
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 10px;
+/* Table Headers */
+table th {
+    background: #007bff;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
     text-align: left;
 }
 
-th {
-    background-color: #f2f2f2;
+/* Table Data */
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Alternating Row Colors */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    table th, table td {
+        padding: 10px;
+    }
+
+    input[type="text"] {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
 }

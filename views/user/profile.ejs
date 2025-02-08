@@ -1,12 +1,22 @@
-<!-- views/user/profile.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Make Auction</title>
+    <title>Edit Profile</title>
     <link rel="stylesheet" href="/css/user/head.css"> <!-- Including dashboard styles -->
     <link rel="stylesheet" href="/css/user/profile.css">
+    <script>
+        // Function to toggle between table and form when the "Update" button is clicked
+        function toggleProfileForm() {
+            const form = document.getElementById('Uprofile-form');
+            const table = document.getElementById('profile-table');
+            const updateButton = document.getElementById('update-btn'); // Get the Edit Profile button
+            form.style.display = 'block';  // Show the form
+            table.style.display = 'none';  // Hide the table
+            updateButton.style.display = 'none'; // Hide the Edit Profile button
+        }
+    </script>
 </head>
 <body>
     <!-- Include the dashboard header -->
@@ -16,21 +26,40 @@
         <h1>Welcome, <%= user.name %></h1>
         
         <% if (user.profile_completed == false) { %>
-            <form action="/userDashboard/user/profile" method="POST">
+            <!-- Profile Completion Form (For New Users) -->
+            <h2>Complete Your Profile First</h2>
+            <P>Mobile number must contain exactly 10 digits.</P>
+            <form id="profile-form" action="/userDashboard/user/profile" method="POST">
+                <label for="user_type">User Type:</label>
+                <select name="user_type" id="user_type" required>
+                    <option value="seller">Seller</option>
+                    <option value="buyer" selected>Buyer</option>
+                    <option value="commission trader">Commission Trader</option>
+                    <option value="service provider">Service Provider</option>
+                </select>
+                
                 <label for="mobile">Mobile:</label>
                 <input type="text" name="mobile" id="mobile" value="<%= user.mobile %>" required>
+                
                 <label for="PAN_number">PAN Number:</label>
                 <input type="text" name="PAN_number" id="PAN_number" value="<%= user.PAN_number %>">
+                
                 <label for="city">City:</label>
                 <input type="text" name="city" id="city" value="<%= user.city %>">
+                
                 <label for="state">State:</label>
                 <input type="text" name="state" id="state" value="<%= user.state %>">
+                
                 <label for="nation">Nation:</label>
                 <input type="text" name="nation" id="nation" value="<%= user.nation %>">
-                <button type="submit">Submit</button>
+                
+                <!-- Submit Button (For New Profile Completion) -->
+                <button type="submit" class="btn btn-primary">Submit Profile</button>
             </form>
         <% } else { %>
-            <table>
+            <!-- Profile Display for Completed Profiles -->
+            <h2>Your Profile</h2>
+            <table id="profile-table">
                 <tr>
                     <th>Field</th>
                     <th>Value</th>
@@ -60,11 +89,124 @@
                     <td><%= user.state %></td>
                 </tr>
                 <tr>
-                    <td>Nation</td>
+                    <td>Nationality</td>
                     <td><%= user.nation %></td>
                 </tr>
+                <tr>
+                    <td>User Type</td>
+                    <td><%= user.user_type %></td>
+                </tr>
             </table>
+
+            <!-- Update Button (For Editing Profile) -->
+            <h3></h3>
+            <button id="update-btn" onclick="toggleProfileForm()" class="btn btn-primary">Edit Profile</button>
         <% } %>
 
+        <!-- Hidden Form for Profile Editing (Shows when the "Edit Profile" button is clicked) -->
+        <% if (user.profile_completed == true) { %>
+            <form id="Uprofile-form" action="/userDashboard/user/profile" method="POST" style="display:none;">
+                <label for="user_type">User Type:</label>
+                <select name="user_type" id="user_type" required>
+                    <option value="seller" <% if (user.user_type === 'seller') { %>selected<% } %>>Seller</option>
+                    <option value="buyer" <% if (user.user_type === 'buyer') { %>selected<% } %>>Buyer</option>
+                    <option value="commission trader" <% if (user.user_type === 'commission trader') { %>selected<% } %>>Commission Trader</option>
+                    <option value="service provider" <% if (user.user_type === 'service provider') { %>selected<% } %>>Service Provider</option>
+                </select>
+                
+                <label for="mobile">Mobile:</label>
+                <input type="text" name="mobile" id="mobile" value="<%= user.mobile %>" required>
+                
+                <label for="PAN_number">PAN Number:</label>
+                <input type="text" name="PAN_number" id="PAN_number" value="<%= user.PAN_number %>">
+                
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="<%= user.city %>">
+                
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state" value="<%= user.state %>">
+                
+                <label for="nation">Nation:</label>
+                <input type="text" name="nation" id="nation" value="<%= user.nation %>">
+                
+                <!-- Submit Button (For Profile Update) -->
+                <button type="submit" class="btn btn-primary">Submit Profile</button>
+            </form>
+        <% } %>
+    </div>
+
+    <!-- Optional: Add custom button styling (Bootstrap or custom styles) -->
+    <style>
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff; /* Bootstrap primary blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Styling for the form and table */
+        form {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        h2, h3 {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        const Uprofile_form = document.querySelector('#Uprofile-form');
+        Uprofile_form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(Uprofile_form);
+            
+            // Convert FormData to JSON object
+            const formDataObj = Object.fromEntries(formData.entries());
+
+            //console.log("Form Data Object:", formDataObj);  // Check if data is being collected properly
+
+            fetch('/userDashboard/user/profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // Explicitly setting JSON content type
+                },
+                body: JSON.stringify(formDataObj) // Send data as JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response from server:", data); // Debug server response
+                if (data.message) {
+                    alert(data.message);  // Show the message
+                    window.location.reload(); // Reload the page
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating your profile.');
+            });
+        });
+    </script>
 </body>
 </html>

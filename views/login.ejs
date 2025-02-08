@@ -4,31 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agricultural Auction System</title>
+    <title>Agricultural Auction System - Login</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="/css/admin_login.css">
+    <header class="header-container">
+        <div class="container">
+          <img src="../img/logo1.jpg" alt="Logo" class="logo">
+          <h1>Agricultural Auction System</h1>
+          <nav class="nav">
+            <ul class="header-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/auction">Auctions</a></li>
+              <li><a href="/authUser/login" class="login-link">Login</a></li>
+            </ul>
+          </nav>
+        </div>
+    </header>
 </head>
 <body>
-    <head>
-        <header>
-            <div class="container">
-                <img src="../img/logo1.jpg" alt="Logo" class="logo">
-                <h1>Agricultural Auction System</h1>
-                <nav>
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/auction">Auctions</a></li>
-                        <li><a href="/authUser/login">Login</a></li>
-                        <li><a href="#">Term and Condition</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>            
-    </head>
-
     <main>
-        <div class="container">
+        <div class="registration_Form">
             <!-- Registration Form Section -->
             <div id="registrationSection" class="form-section">
                 <div class="info">
@@ -43,10 +38,11 @@
                     <p>Already have an account? <a href="#" id="toggleLogin">Log In</a></p>
                     <h2> User Register Only</h2>
                     <form action="/authUser/register" method="POST" id="registrationForm">
-                        <input type="text" name="name" id="regName" placeholder="Name" required>
-                        <input type="email" name="email" id="regEmail" placeholder="Email" required>
-                        <input type="password" name="password" id="regPassword" placeholder="Password" required>
-                        <button type="submit">Register</button>
+                        <input type="text" name="name" id="regName" placeholder="Name"  required autocomplete="on">
+                        <input type="email" name="email" id="regEmail" placeholder="Email"  required autocomplete="on">
+                        <input type="password" name="password" id="regPassword" placeholder="Password"  required autocomplete="new-password">
+                        <button type="button" id="togglePassword">Show</button> 
+                        <button type="submit">submit</button>                       
                     </form>
                 </div>
             </div>
@@ -65,25 +61,18 @@
                     <p>Don't have an account? <a href="#" id="toggleRegister">Create Profile</a></p>
                     <h2>Login</h2>
                     <form action="/authUser/login" method="POST" id="loginForm">
-                        <input type="email" name="email" id="loginEmail" placeholder="Email" required>
-                        <input type="password" name="password" id="loginPassword" placeholder="Password" required>
+                        <label for="role" class="text">Select Role:</label>
+                        <select name="role" id="role" class="select-field" required>
+                            <option value="">Select Role</option>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>                        
+                        <input type="email" name="email" id="loginEmail" placeholder="Email" required autocomplete="on">
+                        <input type="password" name="password" id="loginPassword" placeholder="Password" required autocomplete="new-password">
                         <button type="submit">Login</button>
                     </form>
                 </div>
             </div>
-        </div>
-
-        <div id="app">
-            <h1>Admin Login</h1>
-            <form action="/authAdmin/admin_login" method="POST">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            
-                <button type="submit">Login</button>
-            </form>
         </div>
     </main>
 
@@ -92,17 +81,29 @@
 
     <script>
         // Toggle between Registration and Login sections
-        document.getElementById('toggleLogin').addEventListener('click', function (event) {
+        document.getElementById('toggleLogin').addEventListener('click', function(event) {
             event.preventDefault();
             document.getElementById('registrationSection').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
         });
 
-        document.getElementById('toggleRegister').addEventListener('click', function (event) {
+        document.getElementById('toggleRegister').addEventListener('click', function(event) {
             event.preventDefault();
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('registrationSection').classList.remove('hidden');
         });
+        // Add a Password Show/Hide Feature
+        document.getElementById("togglePassword").addEventListener("click", function() {
+            let passwordField = document.getElementById("regPassword");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.textContent = "Hide";
+            } else {
+                passwordField.type = "password";
+                this.textContent = "Show";
+            }
+        });
+
 
         // Optional: Include custom fetch handling for form submissions if necessary
         // Registration and login are already handled server-side by POST methods
@@ -130,8 +131,10 @@
 
                 const data = await response.json();
 
+                console.log(data);
                 if (response.ok) {
                     alert(data.message);
+                    event.target.reset(); // Clears the form fields after successful registration
                 } else {
                     alert('Registration failed: ' + data.message);
                 }
@@ -144,6 +147,7 @@
         document.getElementById('loginForm').addEventListener('submit', async function (event) {
             event.preventDefault();
 
+            const role = document.getElementById('role').value;
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
@@ -153,7 +157,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify({ email, password,role }),
                 });
 
                 const data = await response.json();
@@ -162,6 +166,7 @@
                     // Redirect to the specified URL
                     if (data.redirectUrl) {
                         window.location.href = data.redirectUrl;
+                        event.target.reset(); // Clears the form fields after successful registration
                     } else {
                         alert(data.message);
                     }

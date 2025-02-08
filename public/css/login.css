@@ -1,24 +1,19 @@
-/* General Styling */
-/* Header Styling */
 main {
-    background-color:antiquewhite;
-    margin-top: 0;
-    padding: 1rem 1rem;
-    padding-top: 5rem;
+    min-height: 600px;
     display: flex;
-    gap: 20px;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    position: relative; /* Ensures positioning works correctly */
+    background-color: #ffffff;
 }
 
-main .container {
-    display:flex;
-    width: 800px;
-    max-width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #b9c798;
+main .registration_Form {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+    max-width: 800px;
+    width: 100%;
+    position: relative; /* Change from absolute to relative */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Form Sections */
@@ -57,10 +52,11 @@ main .form-section {
     width: 50%;
     padding: 2rem;
     background: #fff;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
     text-align: center;
+    display: flex; 
+    justify-content: center;  /* Centers horizontally */
+    align-items: center;  /* Centers vertically */
 }
 
 .form h2 {
@@ -72,6 +68,16 @@ main .form-section {
     margin-top: 0;
     font-size: 1rem;
     line-height: 1.5;
+}
+
+.form select{
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
 .form input {

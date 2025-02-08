@@ -62,18 +62,18 @@
                         <input type="datetime-local" id="auction_end_date" name="auction_end_date" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="categoryName" class="form-label">Category:</label>
-                        <select id="categoryName" name="categoryName" class="form-select" required>
+                        <label for="category_id" class="form-label">Category:</label>
+                        <select id="category_id" name="category_id" class="form-select" required>
                             <option value="">Select a category</option>
                             <% if (categories && categories.length > 0) { %>
                                 <% categories.forEach(category => { %>
-                                    <option value="<%= category.category_name %>"><%= category.category_name %></option>
+                                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
                                 <% }); %>
                             <% } else { %>
                                 <option value="">No categories available</option>
                             <% } %>
                         </select>
-                    </div>
+                    </div>                    
                     <button type="submit" class="btn" name="form_type" value="product">Add Product</button>
                 </form>
             </div>
@@ -91,6 +91,18 @@
                 </div>
             <% } %>            
         </div>
+        
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let now = new Date().toISOString().slice(0, 16);
+            document.getElementById("auction_start_date").setAttribute("min", now);
+            document.getElementById("auction_end_date").setAttribute("min", now);
+    
+            document.getElementById("auction_start_date").addEventListener("change", function () {
+                document.getElementById("auction_end_date").setAttribute("min", this.value);
+            });
+        });
+    </script>
 </body>
 </html>

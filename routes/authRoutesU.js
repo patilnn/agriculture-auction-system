@@ -44,47 +44,79 @@ router.get('/login', (req, res) => {
     res.render('login'); // EJS template for login
 });
 
-// Handle Login
+// Handle Login (User and Admin combined)
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !role) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
     try {
-        // Query the user table
-        db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-            if (err) {
-                console.error('Database error:', err);
-                return res.status(500).json({ message: 'Server error' });
-            }
-
-            if (results.length > 0) {
-                const user = results[0];
-
-                // Compare hashed passwords
-                const isMatch = await bcrypt.compare(password, user.password);
-
-                if (isMatch) {
-                    // Save user session
-                    req.session.isUser = true;
-                    req.session.userId = user.id;
-                    req.session.userName = user.name;
-
-                    // Send a JSON response with the redirect URL
-                    return res.status(200).json({ message: 'Login successful', redirectUrl: '/userDashboard/user/dashboard_user' });
-                } else {
-                    return res.status(401).json({ message: 'Invalid credentials' });
+        if (role === 'user') {
+            // Handle User Login
+            db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+                if (err) {
+                    console.error('Database error:', err);
+                    return res.status(500).json({ message: 'Server error' });
                 }
-            } else {
-                return res.status(404).json({ message: 'User not found' });
-            }
-        });
+
+                if (results.length > 0) {
+                    const user = results[0];
+
+                    const isMatch = await bcrypt.compare(password, user.password);
+
+                    if (isMatch) {
+                        req.session.isUser = true;
+                        req.session.userId = user.id;
+                        req.session.userName = user.name;
+
+                        return res.status(200).json({
+                            message: 'User login successful',
+                            redirectUrl: '/userDashboard/user/dashboard_user' // Redirect to user dashboard
+                        });
+                    } else {
+                        return res.status(401).json({ message: 'Invalid credentials' });
+                    }
+                } else {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+            });
+        } else if (role === 'admin') {
+            // Handle Admin Login
+            db.query('SELECT * FROM admin WHERE email = ?', [email], (err, results) => {
+                if (err) {
+                    console.error('Database error:', err);
+                    return res.status(500).json({ message: 'Server error' });
+                }
+
+                if (results.length > 0) {
+                    const admin = results[0];
+
+                    if (password === admin.password) {
+                        req.session.isAdmin = true;
+                        req.session.adminId = admin.id;
+                        req.session.adminName = admin.name;
+
+                        return res.status(200).json({
+                            message: 'Admin login successful',
+                            redirectUrl: '/AdminDash/admin/dashboard_admin' // Redirect to admin dashboard
+                        });
+                    } else {
+                        return res.status(401).json({ message: 'Incorrect password.' });
+                    }
+                } else {
+                    return res.status(404).json({ message: 'Admin not found.' });
+                }
+            });
+        } else {
+            return res.status(400).json({ message: 'Invalid role selected' });
+        }
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 module.exports = router;

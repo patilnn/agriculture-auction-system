@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Auction</title>
+    <link rel="stylesheet" href="/css/user/edit_auction.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Edit Auction</h1>
+        <a href="/userDashboard/user/See_auction">Back to Auctions</a>
+    </header>
+
+    <main>
+        <% if (error) { %>
+            <p style="color: red;"><%= error %></p>
+        <% } %>
+
+        <% if (message) { %>
+            <p style="color: green;"><%= message %></p>
+        <% } %>
+
+        <form action="/userDashboard/user/edit_auction/<%= auction.product_id %>" method="POST" enctype="multipart/form-data">
+            <label>Product Name:</label>
+            <input type="text" name="product_name" value="<%= auction.product_name %>" required>
+
+            <label>Description:</label>
+            <textarea name="Product_description" required><%= auction.description %></textarea>
+
+            <label>Starting Price:</label>
+            <input type="number" name="starting_price" value="<%= auction.starting_price %>" required>
+
+            <label>Reserve Price:</label>
+            <input type="number" name="reserve_price" value="<%= auction.reserve_price %>" required>
+
+            <label>Category:</label>
+            <select name="category_id" required>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.category_id %>" 
+                        <% if (category.category_id === auction.category_id) { %> selected <% } %>>
+                        <%= category.category_name %>
+                    </option>
+                <% }); %>
+            </select>
+
+            <label>Auction Start Date:</label>
+            <input type="datetime-local" name="auction_start_date" value="<%= auction.auction_start_date.toISOString().slice(0, 16) %>" required>
+
+            <label>Auction End Date:</label>
+            <input type="datetime-local" name="auction_end_date" value="<%= auction.auction_end_date.toISOString().slice(0, 16) %>" required>
+
+            <label>Current Image:</label>
+            <img src="/img2/<%= auction.image_url %>" alt="Current Image" width="150">
+
+            <label>Upload New Image (optional):</label>
+            <input type="file" name="image">
+
+            <input type="hidden" name="old_image" value="<%= auction.image_url %>">
+
+            <button type="submit">Update Auction</button>
+        </form>
+    </main>
+</body>
+</html>

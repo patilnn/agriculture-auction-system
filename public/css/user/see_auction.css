@@ -1,0 +1,120 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.container{
+    margin-top: 5rem;
+}
+/* Centering Form */
+.form-container {
+    width: 50%;
+    max-width: 600px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 30px auto;
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+}
+
+/* Image Styling */
+img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Action Buttons */
+/* Centering Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center; /* Centers buttons horizontally */
+    align-items: center; /* Aligns buttons vertically */
+    gap: 12px;
+    margin-top: 25px; /* Adds spacing above buttons */
+}
+
+/* Buttons */
+.edit-btn, .delete-btn {
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: 2px solid transparent; /* Ensures consistent border width */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: inline-block;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Edit Button */
+.edit-btn {
+    background: #28a745;
+    color: white;
+    border-color: #218838; /* Visible border */
+}
+
+.edit-btn:hover {
+    background: white;
+    color: #28a745;
+    border-color: #28a745;
+    transform: scale(1.05);
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border-color: #c82333; /* Visible border */
+}
+
+.delete-btn:hover {
+    background: white;
+    color: #dc3545;
+    border-color: #dc3545;
+    transform: scale(1.05);
+}

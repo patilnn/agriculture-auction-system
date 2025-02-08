@@ -1,46 +1,77 @@
-<!-- footer.ejs -->
 <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section discover">
-        <h2>Discover</h2>
-        <ul>
-          <li><a href="#">Buy & Sell</a></li>
-          <li><a href="#">Merchants</a></li>
-          <li><a href="#">Help & Support</a></li>
-        </ul>
+  <div class="footer-container">
+    <!-- Left Side: Signup Form -->
+    <div class="footer-signup">
+      <h2>Don't Miss Out</h2>
+      <p>Sign up for the latest agricultural news, product samples, and offers.</p>
+      <form action="#" method="POST">
+        <label for="email">Email Address*</label>
+        <input type="email" id="email" name="email" placeholder="Enter Your Email Address" required autocomplete="on">
+
+        <label for="birthday">Birthday*</label>
+        <input type="date" id="birthday" name="birthday" required>
+
+        <button type="submit">Sign Up</button>
+      </form>
+      <p class="disclaimer">
+        This site is intended for US consumers. By signing up, you agree to our 
+        <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>.
+      </p>
+    </div>
+
+    <!-- Right Side: Upper and Lower Sections -->
+    <div class="footer-right">
+      <!-- Upper Section: Company, Customer Service, Explore -->
+      <div class="footer-links">
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Experts and Spokesmodels</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Customer Service</h3>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">My Account</a></li>
+            <li><a href="#">Store Locator</a></li>
+            <li><a href="#">Redeem Rewards</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>More to Explore</h3>
+          <ul>
+            <li><a href="#">Agriculture News</a></li>
+            <li><a href="#">Tools and Resources</a></li>
+            <li><a href="#">Offers</a></li>
+            <li><a href="#">#AgricultureForAll</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="footer-section quick-links">
-        <h2>Quick Links</h2>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Auctions</a></li>
-        </ul>
-      </div>
-      <div class="footer-section socials">
-        <h2>Socials</h2>
-        <ul class="social-icons">
-          <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-          <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-          <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-          <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-        </ul>
-      </div>
-      <div class="footer-section search">
-        <h2>Search</h2>
-        <input type="text" class="search-bar" placeholder="Search...">
+
+      <!-- Lower Section: Social Media Links -->
+      <div class="footer-social">
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <div class="left">
-        <a href="#">Terms</a>
-        <a href="#">Privacy</a>
-        <a href="#">Companies</a>
-      </div>
-      <div class="right">
-        &copy; 2024 Agricultural Auction System. All rights reserved.
-      </div>
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-left">
+      <a href="#">Site Map</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">User Content Permission Terms</a>
     </div>
-  </footer>  
-</html>
+    <div class="footer-bottom-right">
+      <p>&copy; 2024 Agricultural Auction System. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

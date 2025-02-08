@@ -8,4 +8,54 @@ body {
 }
 .main{
     margin-top: 5rem;
+    padding-left: 2rem;
+}
+.notification-container {
+    position: fixed;
+    /* top: 20px;
+    right: 20px; */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 3rem;
+}
+
+.notification {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 250px;
+    max-width: 400px;
+    font-size: 16px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.close-btn:hover {
+    color: #ff5c5c;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

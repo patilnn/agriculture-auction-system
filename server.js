@@ -14,20 +14,23 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 // Use body parser to handle POST data
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// 
+app.use('/img2', express.static('img2'));
+
 // Setting EJS as templating engine
 app.set('view engine', 'ejs');
 
 // Routes
 const mainRoutes = require('./routes/mainRoutes');
-const authRoutesU = require('./routes/authRoutesU'); //User Authentication
-const userDash = require('./routes/userDash'); //User Dashboard
-const authRoutes = require('./routes/authRoutes'); //Admin Authentication
+const authRoutesU = require('./routes/authRoutesU'); //User-admin Authentication
+const Dash_user = require('./routes/Dash_user'); //User Dashboard
+const Dash_admin = require('./routes/Dash_admin'); //Admin Dashboard
 
 //middelware
 app.use('/', mainRoutes);
 app.use('/authUser', authRoutesU);
-app.use('/userDashboard', userDash); // Include your route
-app.use('/authAdmin', authRoutes);
+app.use('/userDashboard', Dash_user); // Include your route
+app.use('/AdminDash', Dash_admin);
 
 // Error-handling middleware
 app.use((err, req, res, next) => {

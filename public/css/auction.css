@@ -1,12 +1,107 @@
 /* auction.css */
 
-#app {
-    margin-top: 0rem;
-    padding: 2rem;
-    background-color: #fafad2;
+/* Main Container */
+.app {
+    max-width: 1200px;  /* Increased width */
+    margin: 90px 40px 40px 40px;
+    padding: 10px 30px 30px 30px;  /* Increased padding */
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     text-align: center;
 }
 
-h2 {
-    color: #ff8c00;
+/* Heading */
+.app h1 {
+    color: #333;
+    font-size: 32px;  /* Increased font size */
+    margin-bottom: 15px;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* No Products Message */
+.no-products {
+    color: #555;
+    font-size: 18px;
+}
+
+/* Auction Table */
+.auction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px; /* Increased text size */
+}
+
+.auction-table th, .auction-table td {
+    padding: 14px;  /* Increased padding */
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.auction-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* Table Row Hover Effect */
+.auction-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Participate Button */
+.btn-participate {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 16px;  /* Increased button size */
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.btn-participate:hover {
+    background-color: #218838;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .app {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .auction-table th, .auction-table td {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .btn-participate {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .auction-table th, .auction-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn-participate {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
 }

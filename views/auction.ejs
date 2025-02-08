@@ -3,13 +3,60 @@
     <title>Auction</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/auction.css">
+    <header class="header-container">
+        <div class="container">
+          <img src="../img/logo1.jpg" alt="Logo" class="logo">
+          <h1>Agricultural Auction System</h1>
+          <nav class="nav">
+            <ul class="header-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/auction">Auctions</a></li>
+              <li><a href="/authUser/login" class="login-link">Login</a></li>
+            </ul>
+          </nav>
+        </div>
+    </header>
 </head>
+<body>
+    <main>
+        <div class="app">
+            <h1>Auction Page</h1>
+            <p>Details of current auctions.</p>
+            
+            <% if (error) { %>
+                <p class="error-message"><%= error %></p>
+            <% } %>
 
-    <div id="header"></div>
-    <div id="app">
-        <h2>Auction Page</h2>
-        <p>Details of current auctions.</p>
-    </div>
+            <% if (products.length > 0) { %>
+                <table class="auction-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Starting Price</th>
+                            <th>Seller</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach(product => { %>
+                            <tr>
+                                <td><%= product.product_name %></td>
+                                <td><%= product.description %></td>
+                                <td>$<%= product.starting_price %></td>
+                                <td><%= product.seller_name %></td>
+                                <td>
+                                    <button class="btn-participate">Participate</button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="no-products">No products available for auction.</p>
+            <% } %>
+        </div>
+    </main>
     <div id="footer"></div>
     <script src="js/scripts.js"></script>
 </body>

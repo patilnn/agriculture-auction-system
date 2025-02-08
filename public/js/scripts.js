@@ -61,34 +61,4 @@ document.addEventListener('DOMContentLoaded', () => {
         showSlide(slideIndex);
         startAutoSlide();
     }
-
-
-    // const form = document.getElementById('contactForm');
-    // form.addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     const name = document.getElementById('name').value.trim();
-    //     const email = document.getElementById('email').value.trim();
-    //     const nameError = document.getElementById('nameError');
-    //     const emailError = document.getElementById('emailError');
-    //     // Clear previous error messages
-    //     nameError.textContent = '';
-    //     emailError.textContent = '';
-    //     let hasError = false;
-    //     // Validate name
-    //     if (name === '') {
-    //         nameError.textContent = 'Name is required.';
-    //         hasError = true;
-    //     }
-    //     // Validate email
-    //     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    //     if (!emailPattern.test(email)) {
-    //         emailError.textContent = 'Please enter a valid email address.';
-    //         hasError = true;
-    //     }
-    //     // If no errors, display success message
-    //     if (!hasError) {
-    //         alert('Your message has been sent successfully!');
-    //         form.reset();
-    //     }
-    //});
 });
