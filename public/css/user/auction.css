@@ -1,0 +1,151 @@
+/* Basic reset for margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Container for the main content */
+.container {
+    width: 100%; /* Reduced width */
+    margin-top: 5rem;
+}
+
+/* Auction List - grid layout */
+.auction-list {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap when necessary */
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-content: center; /* Centers items */
+}
+
+/* Individual auction item card */
+.auction-item {
+    background-color: #fff;
+    width: 350px; /* Reduced width */
+    padding: 15px; /* Reduced padding */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 550px; /* Adjust height */
+}
+
+/* Hover effect on auction item card */
+.auction-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Auction image styling */
+.auction-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Auction item text styling */
+.auction-item h3 {
+    font-size: 18px; /* Adjusted font size */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.auction-item p {
+    font-size: 14px; /* Adjusted font size */
+    margin-bottom: 10px;
+}
+
+/* Button to place a bid */
+.auction-item .btn {
+    margin-top: auto; /* Push the button to the bottom */
+    display: inline-block;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    align-self: center; /* Center button horizontally */
+}
+
+/* Hover effect for the Place a Bid button */
+.auction-item .btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Active button effect */
+.auction-item .btn:active {
+    background-color: #1e7e34;
+    transform: scale(0.95);
+}
+
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pagination a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ddd;
+    margin: 0 5px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Pagination link hover effect */
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Active page styling */
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Include media queries for responsiveness */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .auction-item {
+        width: 100%; /* Full width on smaller screens */
+        padding: 10px;
+    }
+
+    .auction-item h3 {
+        font-size: 16px;
+    }
+
+    .auction-item p {
+        font-size: 13px;
+    }
+
+    .pagination a {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}

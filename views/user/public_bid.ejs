@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Auctions with Bidders</title>
+    <link rel="stylesheet" href="/css/user/head.css">
+    <link rel="stylesheet" href="/css/user/public_bid.css">
+</head>
+<body>
+    <!-- Include the dashboard header -->
+    <%- include('/pro2/views/user/head') %>
+
+    <div class="container" id="main-content">
+        <h2>Your Auctions with Bidders</h2>
+
+        <% let noBidders = true; %> <!-- Track if any bidders exist -->
+
+        <% if (auctions.length > 0) { %>
+            <% auctions.forEach(auction => { %>
+                <div class="auction-item">
+                    <h3><%= auction.product_name %></h3>
+                    <img src="/img2/<%= auction.image_url %>" alt="<%= auction.product_name %>">
+                    <p><strong>Description:</strong> <%= auction.description %></p>
+                    <p><strong>Starting Price:</strong> $<%= auction.starting_price %></p>
+                    <p><strong>Reserve Price:</strong> $<%= auction.reserve_price %></p>
+                    <p><strong>Auction Ends On:</strong> <%= auction.auction_end_date %></p>
+
+                    <!-- Check if there are any bids -->
+                    <% if (bidsByAuction[auction.product_id] && bidsByAuction[auction.product_id].length > 0) { %>
+                        <% noBidders = false; %> <!-- Bidders exist -->
+                        <h3>Highest Bid: $<%= bidsByAuction[auction.product_id][0].bid_amount %></h3>
+                        
+                        <!-- Bidders List -->
+                        <h3>All Bids</h3>
+                        <table class="bid-table">
+                            <thead>
+                                <tr>
+                                    <th>Bidder Name</th>
+                                    <th>Bidder Email</th>
+                                    <th>Bid Amount</th>
+                                    <th>Bid Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% bidsByAuction[auction.product_id].forEach(bid => { %>
+                                    <tr>
+                                        <td><%= bid.bidder_name %></td>
+                                        <td><%= bid.bidder_email %></td>
+                                        <td>$<%= bid.bid_amount %></td>
+                                        <td><%= bid.bid_time %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <h3 style="color: red;">No bidders have participated in this auction yet.</h3>
+                    <% } %>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No auctions found.</p>
+        <% } %>
+
+        <% if (noBidders) { %>
+            <h3 style="color: red; text-align: center;">No bidders have participated in any of your auctions yet.</h3>
+        <% } %>
+    </div>
+</body>
+</html>

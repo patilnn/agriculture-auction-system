@@ -1,0 +1,104 @@
+/* Basic styling for the bids page */
+.container {
+    width: 80%;
+    margin-top: 5rem;
+    margin-left: 3rem;
+}
+
+.bid-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.bid-item {
+    background-color: #fff;
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.bid-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bid-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.bid-item h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bid-item p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+/* General button styling */
+
+/* Buttons container */
+.bid-buttons {
+    display: flex;
+    width: 100%;
+    margin-top: auto; /* Push buttons to the bottom */
+}
+
+/* Shared button styles */
+.btn {
+    flex: 1; /* Makes both buttons take equal space */
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Edit Button (Yellow) */
+.btn-edit {
+    background-color: #ffc107;
+    color: #333;
+    margin-right: 5px;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+/* Delete Button (Red) */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    margin-left: 5px;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+/* Responsive - Adjust for smaller screens */
+@media (max-width: 600px) {
+    .bid-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}

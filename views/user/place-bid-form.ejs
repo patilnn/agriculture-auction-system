@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place a Bid</title>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .form-container h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Place a Bid on <%= auction.product_name %></h1>
+
+        <form action="/userDashboard/user/place-bid/<%= auction.product_id %>" method="POST">
+            <div class="form-group">
+                <label for="bid_amount">Bid Amount ($):</label>
+                <input type="number" id="bid_amount" name="bid_amount" step="0.01" min="<%= auction.starting_price %>" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Place Bid</button>
+            </div>
+       </form>
+        
+
+        <p><strong>Product Description:</strong> <%= auction.description %></p>
+        <p><strong>Starting Price:</strong> $<%= auction.starting_price %></p>
+        <p><strong>Reserve Price:</strong> $<%= auction.reserve_price %></p>
+        <p><strong>Seller:</strong> <%= auction.seller_name %></p>
+    </div>
+
+</body>
+</html>

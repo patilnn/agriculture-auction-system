@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Auctions</title>
+    <link rel="stylesheet" href="/css/user/head.css"> <!-- Including dashboard styles -->
+    <link rel="stylesheet" href="/css/user/auction.css">
+</head>
+<body>
+    <!-- Include the dashboard header -->
+    <%- include('/pro2/views/user/head') %>
+    
+    <div class="container" id="main-content">
+        <% const currentDate = new Date(); %>
+
+        <!-- Active Auctions -->
+        <h3>Active Auctions</h3>
+        <% const activeAuctions = auctions.filter(auction => new Date(auction.auction_end_date) >= currentDate); %>
+
+        <% if (activeAuctions.length > 0) { %>
+            <div class="auction-list">
+                <% activeAuctions.forEach(auction => { %>
+                    <div class="auction-item">
+                        <img src="/img2/<%= auction.image_url %>" alt="<%= auction.product_name %>">
+                        <h3><%= auction.product_name %></h3>
+                        <p><strong>Description:</strong> <%= auction.description %></p>
+                        <p><strong>Starting Price:</strong> $<%= auction.starting_price %></p>
+                        <p><strong>Reserve Price:</strong> $<%= auction.reserve_price %></p>
+                        <p><strong>Ends On:</strong> <%= auction.auction_end_date %></p>
+                        <p><strong>Seller:</strong> <%= auction.seller_name %></p>
+                        <a href="/userDashboard/user/place-bid/<%= auction.product_id %>" class="btn">Place a Bid</a>
+                    </div>
+                <% }); %>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination">
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/userDashboard/user/auctions?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                <% } %>
+            </div>
+        <% } else { %>
+            <p>No active auctions found.</p>
+        <% } %>
+    </div>
+</body>
+</html>

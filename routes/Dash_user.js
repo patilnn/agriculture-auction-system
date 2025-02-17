@@ -12,14 +12,20 @@ router.get('/user/head', (req, res) => {
     res.render('user/head');
 });
 
+router.get('/',(req,res)=>{
+    res.render('index',{
+        section: 'contact',
+        error: req.session.error,
+        message: req.session.message,
+    });
+})
+
 // Render User Dashboard
 router.get('/user/dashboard_user', profileCheck, (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login'); // Check session
     
     res.render('user/dashboard_user', { id: req.session.userId, name: req.session.userName }); // Pass user data
 });
-
-
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Fetch Categories Function
@@ -188,7 +194,6 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
 });        
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
-
 // Route to display user's created auctions
 router.get('/user/See_auction', profileCheck, async (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login');
@@ -227,7 +232,7 @@ router.get('/user/See_auction', profileCheck, async (req, res) => {
 });
 
 // Render Edit Auction Page
-router.get('/user/edit_auction/:id', profileCheck, async (req, res) => {
+router.get('/user/edit_auction/:productId', profileCheck, async (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login');
 
     const auctionId = req.params.id;
@@ -255,7 +260,7 @@ router.get('/user/edit_auction/:id', profileCheck, async (req, res) => {
 });
 
 // Handle Edit Auction Submission
-router.post('/user/edit_auction/:id', upload.single('image'), async (req, res) => {
+router.post('/user/edit_auction/:productId', upload.single('image'), async (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login');
 
     const auctionId = req.params.id;
@@ -307,7 +312,327 @@ router.post('/user/delete_auction/:id', profileCheck, async (req, res) => {
 });
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
+// Route to display logged-in user's auctions where at least one bidder participated
+router.get('/user/public_bid', profileCheck, (req, res) => {
+    const userId = req.session.userId; // Logged-in user ID
 
+    // SQL query to get auctions created by the logged-in user that have at least one bid
+    const auctionQuery = `
+        SELECT DISTINCT p.product_id, p.product_name, p.description, p.starting_price, 
+               p.reserve_price, p.auction_end_date, p.image_url, u.name AS seller_name
+        FROM products p
+        JOIN bids b ON p.product_id = b.product_id
+        JOIN users u ON p.seller_id = u.id
+        WHERE p.seller_id = ?`; // Only fetch auctions created by logged-in user
+
+    db.query(auctionQuery, [userId], (err, auctions) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        if (auctions.length === 0) {
+            return res.render('user/public_bid', { 
+                id: userId, 
+                name: req.session.userName,
+                auctions: [], 
+                bidsByAuction: {}  
+            });
+        }
+
+        // Fetch all bids for these auctions
+        const auctionIds = auctions.map(a => a.product_id);
+        const bidQuery = `
+            SELECT b.product_id, b.bid_amount, b.bid_time, u.id AS bidder_id, 
+                   u.name AS bidder_name, u.email AS bidder_email
+            FROM bids b
+            JOIN users u ON b.bidder_id = u.id
+            WHERE b.product_id IN (?) 
+            ORDER BY b.bid_amount DESC`; // Highest bid first
+
+        db.query(bidQuery, [auctionIds], (err, bidResults) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Database Error');
+            }
+
+            // Group bids by auction
+            const bidsByAuction = {};
+            bidResults.forEach(bid => {
+                if (!bidsByAuction[bid.product_id]) {
+                    bidsByAuction[bid.product_id] = [];
+                }
+                bidsByAuction[bid.product_id].push(bid);
+            });
+
+            res.render('user/public_bid', {
+                id: req.session.userId,
+                name: req.session.userName,
+                auctions: auctions,
+                bidsByAuction: bidsByAuction
+            });
+        });
+    });
+});
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+// Route to display user's bid's
+router.get('/user/auctions', profileCheck, (req, res) => {
+    const userId = req.session.userId;
+    const page = parseInt(req.query.page) || 1; // Get the page number, default to 1 if not provided
+    const limit = 10; // Number of auctions per page
+    const offset = (page - 1) * limit; // Calculate the offset for pagination
+
+    // Query to count the total number of auctions
+    const countQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id != ?`;
+    
+    // Query to fetch auctions for the current page
+    const auctionQuery = `
+        SELECT p.product_id, p.product_name, p.description, p.starting_price, p.reserve_price, 
+               p.auction_end_date, p.image_url, u.name AS seller_name
+        FROM products p
+        JOIN users u ON p.seller_id = u.id
+        WHERE p.seller_id != ?
+        ORDER BY p.auction_end_date ASC
+        LIMIT ? OFFSET ?`;
+
+    // First, get the total number of auctions
+    db.query(countQuery, [userId], (err, countResults) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        const totalAuctions = countResults[0].total;
+        const totalPages = Math.ceil(totalAuctions / limit); // Calculate total number of pages
+
+        // Then, fetch the auctions for the current page
+        db.query(auctionQuery, [userId, limit, offset], (err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Database Error');
+            }
+
+            // Render the auctions page with pagination data
+            res.render('user/auctions', {
+                id: userId,
+                auctions: results,
+                currentPage: page,
+                totalPages: totalPages,
+                id: req.session.userId, 
+                name: req.session.userName
+            });
+        });
+    });
+});
+
+// Show bid form when the user clicks "Place a Bid"
+router.get('/user/place-bid/:id', profileCheck, (req, res) => {
+    const userId = req.session.userId;
+    const auctionId = req.params.id;
+
+    // Fetch auction details
+    const auctionQuery = `
+        SELECT p.product_id, p.product_name, p.description, p.starting_price, p.reserve_price, 
+               p.auction_end_date, p.image_url, u.name AS seller_name
+        FROM products p
+        JOIN users u ON p.seller_id = u.id
+        WHERE p.product_id = ?`;
+
+    db.query(auctionQuery, [auctionId], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('Auction not found');
+        }
+
+        const auction = results[0];
+        res.render('user/place-bid-form', {
+            id: userId,
+            auction: auction
+        });
+    });
+});
+
+// Handle Bid Form Submission
+router.post('/user/place-bid/:id', profileCheck, (req, res) => {
+    const userId = req.session.userId;
+    const auctionId = req.params.id;
+    const bidAmount = parseFloat(req.body.bid_amount); // Get bid amount from form
+
+    // Ensure bid amount is greater than the current highest bid
+    const currentBidQuery = `
+        SELECT MAX(bid_amount) AS highest_bid
+        FROM bids
+        WHERE product_id = ?`;
+
+    db.query(currentBidQuery, [auctionId], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        const highestBid = result[0].highest_bid || 0; // If no bids, set highest bid to 0
+
+        // Ensure the new bid is higher than the current highest bid
+        if (bidAmount <= highestBid) {
+            return res.status(400).send('Your bid must be higher than the current highest bid');
+        }
+
+        // Insert the new bid into the Bids table
+        const insertBidQuery = `
+            INSERT INTO bids (product_id, bidder_id, bid_amount)
+            VALUES (?, ?, ?)`;
+
+        db.query(insertBidQuery, [auctionId, userId, bidAmount], (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error placing your bid');
+            }
+
+            // Redirect to the auction page or show success message
+            res.redirect(`/userDashboard/user/auctions`);
+        });
+    });
+});
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+// Route to display user's bids
+router.get('/user/bids', profileCheck, (req, res) => {
+    const userId = req.session.userId;
+
+    // SQL query to get all bids made by the logged-in user, along with auction details and highest bid
+    const bidQuery = `
+        SELECT 
+            b.bid_id, 
+            p.product_id, 
+            p.product_name, 
+            p.description, 
+            p.starting_price, 
+            p.reserve_price, 
+            b.bid_amount, 
+            b.bid_time, 
+            p.auction_end_date, 
+            p.image_url, 
+            u.name AS seller_name,
+            (SELECT MAX(bid_amount) FROM bids WHERE product_id = p.product_id) AS highest_bid
+        FROM bids b
+        JOIN products p ON b.product_id = p.product_id
+        JOIN users u ON p.seller_id = u.id
+        WHERE b.bidder_id = ?  
+        ORDER BY b.bid_time DESC`; 
+
+    db.query(bidQuery, [userId], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        res.render('user/bids', {
+            id: userId,
+            bids: results, // Pass the bids data
+            name: req.session.userName
+        });
+    });
+});
+
+// Route to delete a bid
+router.post('/user/bids/delete/:bid_id', profileCheck, (req, res) => {
+    const bidId = req.params.bid_id;
+    const userId = req.session.userId;
+
+    // SQL query to check if the logged-in user owns the bid
+    const checkBidOwnershipQuery = `SELECT * FROM bids WHERE bid_id = ? AND bidder_id = ?`;
+
+    db.query(checkBidOwnershipQuery, [bidId, userId], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        if (results.length === 0) {
+            return res.status(403).send('You are not authorized to delete this bid');
+        }
+
+        // SQL query to delete the bid
+        const deleteBidQuery = `DELETE FROM bids WHERE bid_id = ?`;
+
+        db.query(deleteBidQuery, [bidId], (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Database Error');
+            }
+
+            res.redirect('/userDashboard/user/bids'); // Redirect to the user's bids page after deletion
+        });
+    });
+});
+// Route to display edit bid form
+router.get('/user/bids/edit/:bid_id', profileCheck, (req, res) => {
+    const bidId = req.params.bid_id;
+    const userId = req.session.userId;
+
+    // Query to fetch the bid details for editing
+    const editBidQuery = `
+        SELECT b.bid_id, b.bid_amount, p.product_id, p.product_name
+        FROM bids b
+        JOIN products p ON b.product_id = p.product_id
+        WHERE b.bid_id = ? AND b.bidder_id = ?`;
+
+    db.query(editBidQuery, [bidId, userId], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        if (results.length === 0) {
+            return res.status(403).send('You are not authorized to edit this bid');
+        }
+
+        res.render('user/edit-bid', {
+            bid: results[0], // Pass the bid details to the view
+            id: userId,
+            name: req.session.userName
+        });
+    });
+});
+// Route to update the bid
+router.post('/user/bids/edit/:bid_id', profileCheck, (req, res) => {
+    const bidId = req.params.bid_id;
+    const newBidAmount = req.body.bid_amount; // Assuming you are sending the new bid amount via a POST form
+    const userId = req.session.userId;
+
+    // SQL query to check if the logged-in user owns the bid
+    const checkBidOwnershipQuery = `SELECT * FROM bids WHERE bid_id = ? AND bidder_id = ?`;
+
+    db.query(checkBidOwnershipQuery, [bidId, userId], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Database Error');
+        }
+
+        if (results.length === 0) {
+            return res.status(403).send('You are not authorized to edit this bid');
+        }
+
+        // SQL query to update the bid amount
+        const updateBidQuery = `UPDATE bids SET bid_amount = ? WHERE bid_id = ?`;
+
+        db.query(updateBidQuery, [newBidAmount, bidId], (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Database Error');
+            }
+
+            res.redirect('/userDashboard/user/bids'); // Redirect to the user's bids page after editing
+        });
+    });
+});
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------
 // Render User profile
 router.get('/user/profile', (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login'); // Check session

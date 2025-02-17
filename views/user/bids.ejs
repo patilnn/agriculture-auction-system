@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bids</title>
+    <link rel="stylesheet" href="/css/user/head.css">
+    <link rel="stylesheet" href="/css/user/bids.css">
+</head>
+<body>
+    <!-- Include the dashboard header -->
+    <%- include('/pro2/views/user/head') %>
+
+    <div class="container" id="main-content">
+        <h2>Your Bids</h2>
+        <div class="bid-list">
+            <% bids.forEach(bid => { %>
+                <div class="bid-item">
+                    <img src="/img2/<%= bid.image_url %>" alt="<%= bid.product_name %>">
+                    <h3><%= bid.product_name %></h3>
+                    <p><strong>Description:</strong> <%= bid.description %></p>
+                    <p><strong>Your Bid:</strong> $<%= bid.bid_amount %></p>
+                    <p><strong>Highest Bid:</strong> $<%= bid.highest_bid %></p>
+                    <p><strong>Bid Time:</strong> <%= bid.bid_time %></p>
+                    <p><strong>Auction Ends On:</strong> <%= bid.auction_end_date %></p>
+                    <p><strong>Seller:</strong> <%= bid.seller_name %></p>
+
+                    <!-- Edit and Delete Buttons -->
+                    <a href="/userDashboard/user/bids/edit/<%= bid.bid_id %>" class="btn btn-edit">Edit</a>
+                    <form action="/userDashboard/user/bids/delete/<%= bid.bid_id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-delete">Delete</button>
+                    </form>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+/* Center the main content */
+#main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers all content horizontally */
+    justify-content: center; /* Centers content vertically if needed */
+    text-align: center;
+    width: 100%;
+}
+
+/* Center the container */
+.container {
+    width: 60%;
+    margin: 5rem auto; /* Centers the container */
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Auction details section */
+.auction-item {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 20px;
+}
+
+/* Center images */
+.auction-item img {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Center the bids table */
+.bid-table {
+    width: 80%;
+    margin: 20px auto; /* Centers the table */
+    border-collapse: collapse;
+}
+
+.bid-table th, .bid-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.bid-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.bid-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .bid-table {
+        width: 100%;
+    }
+}

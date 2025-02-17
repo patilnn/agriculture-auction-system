@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Your Bid</title>
+    <link rel="stylesheet" href="/css/user/edit-bid.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Edit Your Bid for <%= bid.product_name %></h2>
+
+        <form action="/userDashboard/user/bids/edit/<%= bid.bid_id %>" method="POST">
+            <label for="bid_amount">New Bid Amount:</label>
+            <input type="number" id="bid_amount" name="bid_amount" value="<%= bid.bid_amount %>" required min="<%= bid.bid_amount + 0.01 %>" step="0.01">
+            <button type="submit" class="btn">Update Bid</button>
+        </form>
+    </div>
+</body>
+</html>
