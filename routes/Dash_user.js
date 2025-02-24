@@ -20,12 +20,76 @@ router.get('/',(req,res)=>{
     });
 })
 
-// Render User Dashboard
-router.get('/user/dashboard_user', profileCheck, (req, res) => {
-    if (!req.session.isUser) return res.redirect('/authUser/login'); // Check session
-    
-    res.render('user/dashboard_user', { id: req.session.userId, name: req.session.userName }); // Pass user data
+// Render User Dashboard with Chart Data
+router.get("/user/dashboard_user", async (req, res) => {
+    if (!req.session.isUser) return res.redirect('/authUser/login');
+
+    try {
+        const userId = req.session.userId;
+        if (!userId) return res.status(401).send("Unauthorized: Please log in");
+
+        const currentDateTime = new Date();
+
+        // Queries for auction stats
+        const totalQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id = ?`;
+        const activeQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id = ? AND auction_start_date <= ? AND auction_end_date >= ?`;
+        const pastQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id = ? AND auction_end_date < ?`;
+
+        // Query for product and bid data
+        const auctionDataQuery = `
+            SELECT p.product_name, p.starting_price, p.reserve_price, 
+                   COALESCE(MAX(b.bid_amount), 0) AS highest_bid
+            FROM products p
+            LEFT JOIN bids b ON p.product_id = b.product_id
+            WHERE p.seller_id = ?
+            GROUP BY p.product_id
+        `;
+
+        db.query(totalQuery, [userId], (err, totalResult) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).send("Database error");
+            }
+
+            db.query(activeQuery, [userId, currentDateTime, currentDateTime], (err, activeResult) => {
+                if (err) {
+                    console.error("Database error:", err);
+                    return res.status(500).send("Database error");
+                }
+
+                db.query(pastQuery, [userId, currentDateTime], (err, pastResult) => {
+                    if (err) {
+                        console.error("Database error:", err);
+                        return res.status(500).send("Database error");
+                    }
+
+                    db.query(auctionDataQuery, [userId], (err, auctionResults) => {
+                        if (err) {
+                            console.error("Database error:", err);
+                            return res.status(500).send("Database error");
+                        }
+
+                        //console.log("Auction Data:", auctionResults); // Debugging output
+
+                        res.render("user/dashboard_user", {
+                            id: req.session.userId,
+                            name: req.session.userName,
+                            totalAuctions: totalResult[0]?.total || 0,
+                            activeAuctions: activeResult[0]?.total || 0,
+                            pastAuctions: pastResult[0]?.total || 0,
+                            auctionResults: auctionResults || []
+                        });
+                    });
+                });
+            });
+        });
+    } catch (error) {
+        console.error("Server error:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
+
+
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Fetch Categories Function
@@ -431,10 +495,11 @@ router.get('/user/place-bid/:id', profileCheck, (req, res) => {
     const userId = req.session.userId;
     const auctionId = req.params.id;
 
-    // Fetch auction details
+    // Fetch auction details along with the highest bid
     const auctionQuery = `
         SELECT p.product_id, p.product_name, p.description, p.starting_price, p.reserve_price, 
-               p.auction_end_date, p.image_url, u.name AS seller_name
+               p.auction_end_date, p.image_url, u.name AS seller_name,
+               (SELECT MAX(bid_amount) FROM Bids WHERE product_id = p.product_id) AS highest_bid
         FROM products p
         JOIN users u ON p.seller_id = u.id
         WHERE p.product_id = ?`;
@@ -456,6 +521,7 @@ router.get('/user/place-bid/:id', profileCheck, (req, res) => {
         });
     });
 });
+
 
 // Handle Bid Form Submission
 router.post('/user/place-bid/:id', profileCheck, (req, res) => {

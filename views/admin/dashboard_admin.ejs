@@ -4,13 +4,8 @@
     <link rel="stylesheet" href="/css/Admin_dashboard.css">
 </head>
 <body>
+    <!-- Include the dashboard header -->
+    <%- include('/pro2/views/admin/head') %>
 
-    <main>
-        <h1>Welcome, Admin <%= name %>!</h1>
-        <p>This is your admin dashboard where you can manage auctions and users.</p>
-        <form action="/AdminDash/logout" method="POST">
-            <button type="submit">Logout</button>
-        </form>
-    </main>
 </body>
 </html>

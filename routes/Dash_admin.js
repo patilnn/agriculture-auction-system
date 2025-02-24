@@ -3,10 +3,28 @@ const bcrypt = require('bcryptjs');
 const db = require('../db'); // Database connection
 const router = express.Router();
 
+// header Page
+router.get('/admin/head', (req, res) => {
+    res.render('admin/head');
+});
+
+router.get('/',(req,res)=>{
+    res.render('index',{
+        section: 'contact',
+        error: req.session.error,
+        message: req.session.message,
+    });
+});
+
 // Render Admin Dashboard
 router.get('/admin/dashboard_admin', (req, res) => {
-    if (!req.session.isAdmin) return res.redirect('/auth/login'); // Check session
-    res.render('admin/dashboard_admin', { name: req.session.adminName }); // Pass admin data
+    if (!req.session.isAdmin) return res.redirect('/authUser/login'); // Check session
+    console.log(req.session);
+    res.render('admin/dashboard_admin', { 
+        id: req.session.adminid,
+        name: req.session.adminName,
+        email: req.session.adminemail
+    }); // Pass admin data
 });
 
 // Handle User Logout

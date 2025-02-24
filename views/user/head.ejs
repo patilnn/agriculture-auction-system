@@ -1,16 +1,28 @@
 <!-- views/user/head.ejs -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <header class="fixed-header">
     <button id="sidebarToggle" class="toggle-button">&#9776;</button>
-    <h2>Welcome, <%= id + " " + name %>!</h2>
+
+    <div class="user-menu">
+        <div class="user-icon" id="userIcon">
+            <i class="fas fa-user"></i> <!-- FontAwesome User Icon -->
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div class="user-dropdown" id="userDropdown">
+            <p><strong>ID:</strong> <%= id %></p>
+            <p><strong>Name:</strong> <%= name %></p>
+        </div>
+    </div>
 </header>
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <ul id="sidebar-options">
-        <li><a href="/">Main Home</a></li>
-        <li><a href="/userDashboard/user/dashboard_user">Home</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/userDashboard/user/dashboard_user">Dashboard</a></li>
         <li><a href="/userDashboard/user/make_auction">Make Auction</a></li>
-        <li><a href="/userDashboard/user/See_auction">See Auction</a></li>
+        <li><a href="/userDashboard/user/See_auction">My Listings</a></li>
         <li><a href="/userDashboard/user/auctions">Place a Bid</a></li>
         <li><a href="/userDashboard/user/bids">Paticipated Auction</a></li>
         <li><a href="/userDashboard/user/public_bid">View Public Bids</a></li>
@@ -25,19 +37,31 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Sidebar toggle functionality
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
 
-            // Toggle the sidebar
-            if (sidebar.style.left === '0px') {
-                sidebar.style.left = '-250px';
-                if (mainContent) mainContent.style.marginLeft = '0';
-            } else {
-                sidebar.style.left = '0px';
-                if (mainContent) mainContent.style.marginLeft = '220px';
+        sidebarToggle.addEventListener('click', () => {
+            const isOpen = sidebar.style.left === '0px';
+            sidebar.style.left = isOpen ? '-250px' : '0px';
+            if (mainContent) mainContent.style.marginLeft = isOpen ? '0' : '220px';
+        });
+
+        // User menu toggle functionality
+        const userIcon = document.getElementById('userIcon');
+        const userDropdown = document.getElementById('userDropdown');
+
+        userIcon.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevents dropdown from closing immediately
+            userDropdown.classList.toggle('active');
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!userIcon.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.classList.remove('active');
             }
         });
     });
 </script>
-</script>
+
