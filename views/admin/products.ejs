@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || "Admin Panel - Products" %></title>
+    <link rel="stylesheet" href="/css/admin/head.css">
+</head>
+<body>
+    <%- include('head') %> <!-- Sidebar & Header -->
+
+    <div class="admin-container">
+        <main class="main-content">
+            <h1 class="admin-title">Manage Products</h1>
+
+            <table border="1" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Seller ID</th>
+                        <th>Seller Name</th>  <!-- New Column -->
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Starting Price</th>
+                        <th>Reserve Price</th>
+                        <th>Image</th>
+                        <th>Auction Start Date</th>
+                        <th>Auction End Date</th>
+                        <th>Category ID</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% products.forEach(product => { %>
+                        <tr>
+                            <td><%= product.product_id %></td>
+                            <td><%= product.seller_id %></td>
+                            <td><%= product.seller_name || 'Unknown' %></td> <!-- Display Seller Name -->
+                            <td><%= product.product_name %></td>
+                            <td><%= product.description %></td>
+                            <td>$<%= product.starting_price %></td>
+                            <td>$<%= product.reserve_price %></td>
+                            <td>
+                                <% if (product.image_url) { %>
+                                    <img src="<%= product.image_url %>" alt="Product Image" width="50">
+                                <% } else { %>
+                                    No Image
+                                <% } %>
+                            </td>
+                            <td><%= product.auction_start_date.toDateString() %></td>
+                            <td><%= product.auction_end_date.toDateString() %></td>
+                            <td><%= product.category_id %></td>
+                            <td><%= product.created_at.toDateString() %></td>
+                            <td><%= product.updated_at.toDateString() %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </main>
+    </div>
+</body>
+</html>

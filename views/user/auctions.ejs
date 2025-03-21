@@ -25,11 +25,17 @@
                         <img src="/img2/<%= auction.image_url %>" alt="<%= auction.product_name %>">
                         <h3><%= auction.product_name %></h3>
                         <p><strong>Description:</strong> <%= auction.description %></p>
+                        <p><strong>quantity:</strong> <%= auction.quantity %></p>                        
                         <p><strong>Starting Price:</strong> $<%= auction.starting_price %></p>
                         <p><strong>Reserve Price:</strong> $<%= auction.reserve_price %></p>
                         <p><strong>Ends On:</strong> <%= auction.auction_end_date %></p>
                         <p><strong>Seller:</strong> <%= auction.seller_name %></p>
-                        <a href="/userDashboard/user/place-bid/<%= auction.product_id %>" class="btn">Place a Bid</a>
+
+                        <% if (!auction.has_bid) { %>
+                            <a href="/userDashboard/user/place-bid/<%= auction.product_id %>" class="btn">Place a Bid</a>
+                        <% } else { %>
+                            <p style="color: red; font-size: 20px;">You have already placed a bid</p>
+                        <% } %>
                     </div>
                 <% }); %>
             </div>

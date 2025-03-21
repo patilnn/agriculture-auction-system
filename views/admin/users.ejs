@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="/css/admin/user.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <%- include('head'); %> <!-- Include Sidebar & Header -->
+
+    <div class="admin-container">
+        <main class="main-content">
+            <h1 class="admin-title">Manage Users</h1>
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Verification Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.id %></td>
+                            <td><%= user.name %></td>
+                            <td><%= user.email %></td>
+                            <td class="<%= user.verification_status %>"><%= user.verification_status %></td>
+                            <td>
+                                <% if (user.verification_status !== 'verified') { %>
+                                    <form action="/AdminDash/admin/verify/<%= user.id %>" method="POST" style="display:inline;">
+                                        <button type="submit" class="verify-btn">✔ Verify</button>
+                                    </form>
+                                <% } %>
+                                
+                                <form action="/AdminDash/admin/delete/<%= user.id %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete user ID <%= user.id %>?');">🗑 Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>                              
+            </table>
+            
+            
+            <style>
+                .inline-form {
+                    display: inline;
+                }
+                .verify-btn {
+                    background-color: #28a745;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                }
+                .delete-btn {
+                    background-color: #dc3545;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                }
+                .verified { color: green; font-weight: bold; }
+                .pending { color: orange; font-weight: bold; }
+                .rejected { color: red; font-weight: bold; }
+        </style>        
+    </body>
+</html>

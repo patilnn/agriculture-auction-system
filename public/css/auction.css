@@ -1,12 +1,16 @@
-/* auction.css */
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
 
 /* Main Container */
 .app {
-    max-width: 1200px;  /* Increased width */
-    margin: 90px 40px 40px 40px;
-    padding: 10px 30px 30px 30px;  /* Increased padding */
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    padding: 20px 30px;
     background-color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     text-align: center;
 }
@@ -14,8 +18,9 @@
 /* Heading */
 .app h1 {
     color: #333;
-    font-size: 32px;  /* Increased font size */
-    margin-bottom: 15px;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
 /* Error Message */
@@ -29,46 +34,70 @@
 .no-products {
     color: #555;
     font-size: 18px;
-}
-
-/* Auction Table */
-.auction-table {
-    width: 100%;
-    border-collapse: collapse;
     margin-top: 20px;
-    font-size: 18px; /* Increased text size */
 }
 
-.auction-table th, .auction-table td {
-    padding: 14px;  /* Increased padding */
-    border: 1px solid #ddd;
-    text-align: left;
+/* Auction Container */
+.auction-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
 }
 
-.auction-table th {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
+/* Auction Card */
+.auction-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Table Row Hover Effect */
-.auction-table tr:hover {
-    background-color: #f1f1f1;
+.auction-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Product Image */
+.auction-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Auction Card Content */
+.auction-card h3 {
+    color: #333;
+    font-size: 20px;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.auction-card p {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 8px;
 }
 
 /* Participate Button */
 .btn-participate {
-    background-color: #28a745;
+    background: #28a745;
     color: white;
-    padding: 10px 16px;  /* Increased button size */
+    padding: 10px 16px;
     border: none;
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
+    transition: background 0.3s ease;
 }
 
 .btn-participate:hover {
-    background-color: #218838;
+    background: #218838;
 }
 
 /* Responsive Design */
@@ -78,9 +107,8 @@
         padding: 20px;
     }
 
-    .auction-table th, .auction-table td {
-        font-size: 16px;
-        padding: 10px;
+    .auction-card {
+        width: 280px;
     }
 
     .btn-participate {
@@ -95,9 +123,8 @@
         padding: 15px;
     }
 
-    .auction-table th, .auction-table td {
-        font-size: 14px;
-        padding: 8px;
+    .auction-card {
+        width: 100%;
     }
 
     .btn-participate {

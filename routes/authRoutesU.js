@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const db = require('../db'); // Database connection
+const db = require('../config/db'); // Database connection
 const router = express.Router();
 
 // Render Registration Page

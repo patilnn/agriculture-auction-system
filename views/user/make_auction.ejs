@@ -9,8 +9,20 @@
     <%- include('/pro2/views/user/head') %>
 
     <div class="main" id="main-content">
-        <h1>Create Auction</h1>
+        <h1>Create Agricultural Product Auction</h1>
         <div class="container">
+            <!-- Category Form Instructions -->
+            <div class="instruction-box">
+                <h3>📌 Instructions for Adding Agricultural Product Auctions & Categories</h3>
+                <ul>
+                    <li><b>Who Can Add?</b> Both **users (bidders, sellers, traders)** and **admin** can add new categories.</li>
+                    <li><b>Verification:</b> Every category and product must be **verified by the admin** before appearing in the listings.</li>
+                    <li><b>Approval Time:</b> Categories and products are **not available immediately**. Admin approval may take up to **24 hours**.</li>
+                    <li><b>Checking Status:</b> Approved categories will appear in the **product category dropdown** after verification.</li>
+                    <li><b>Ensure Accuracy:</b> Enter clear and meaningful **category names and descriptions** to speed up approval.</li>
+                </ul>
+            </div>
+
             <!-- Category Form -->
             <div class="form-section">
                 <h2>Add a New Category</h2>
@@ -32,6 +44,19 @@
                 <h2>Add a New Product</h2>
                 <form action="/userDashboard/user/make_auction" method="POST" enctype="multipart/form-data" class="form">
                     <div class="form-group">
+                        <label for="category_id" class="form-label">Category:</label>
+                        <select id="category_id" name="category_id" class="form-select" required>
+                            <option value="">Select a category</option>
+                            <% if (categories && categories.length > 0) { %>
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
+                                <% }); %>
+                            <% } else { %>
+                                <option value="">No categories available</option>
+                            <% } %>
+                        </select>
+                    </div>     
+                    <div class="form-group">
                         <label for="product_name" class="form-label">Product Name:</label>
                         <input type="text" id="product_name" name="product_name" class="form-input" placeholder="Enter product name" required>
                     </div>
@@ -39,6 +64,10 @@
                         <label for="Product_description" class="form-label">Description:</label>
                         <textarea id="Product_description" name="Product_description" class="form-textarea" placeholder="Enter product description" required></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="quantity" class="form-label">quantity:</label>
+                        <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Enter quantity">
+                    </div>               
                     <div class="form-group">
                         <label for="starting_price" class="form-label">Starting Price:</label>
                         <input type="number" id="starting_price" name="starting_price" class="form-input" step="0.01" placeholder="Enter starting price" required>
@@ -59,38 +88,27 @@
                         <label for="auction_end_date" class="form-label">Auction End Date:</label>
                         <input type="datetime-local" id="auction_end_date" name="auction_end_date" class="form-input" required>
                     </div>
-                    <div class="form-group">
-                        <label for="category_id" class="form-label">Category:</label>
-                        <select id="category_id" name="category_id" class="form-select" required>
-                            <option value="">Select a category</option>
-                            <% if (categories && categories.length > 0) { %>
-                                <% categories.forEach(category => { %>
-                                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
-                                <% }); %>
-                            <% } else { %>
-                                <option value="">No categories available</option>
-                            <% } %>
-                        </select>
-                    </div>                    
                     <button type="submit" class="btn" name="form_type" value="product">Add Product</button>
                 </form>
             </div>
         </div>
+
         <div class="msg">
             <!-- Display Success and Error Messages -->
             <% if (message) { %>
-                <div class="alert alert-success" style="margin-top: 10px; padding: 10px; border-radius: 5px; color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb;">
+                <div class="alert alert-success">
                     <%= message %>
                 </div>
             <% } %>
             <% if (error) { %>
-                <div class="alert alert-danger" style="margin-top: 10px; padding: 10px; border-radius: 5px; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb;">
+                <div class="alert alert-danger">
                     <%= error %>
                 </div>
             <% } %>            
         </div>
         
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let now = new Date().toISOString().slice(0, 16);

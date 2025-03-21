@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || "Admin Panel - Bids" %></title>
+    <link rel="stylesheet" href="/css/admin/head.css">
+    <link rel="stylesheet" href="/css/admin/bids.css">
+    <script>
+        function toggleBidderDetails(productId) {
+            const dropdown = document.getElementById(`bidder-details-${productId}`);
+
+            if (dropdown.innerHTML.trim() === "") {
+                fetch(`/admin/bidder-details/${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            dropdown.innerHTML = `
+                                <table border="1" class="bidder-table">
+                                    <tr>
+                                        <th>Bidder Name</th>
+                                        <th>Email</th>
+                                        <th>Bid Amount</th>
+                                        <th>Bid Time</th>
+                                    </tr>
+                                    ${data.bidders.map(bidder => `
+                                        <tr>
+                                            <td>${bidder.bidder_name}</td>
+                                            <td>${bidder.email}</td>
+                                            <td>${bidder.bid_amount}</td>
+                                            <td>${new Date(bidder.bid_time).toLocaleString()}</td>
+                                        </tr>
+                                    `).join('')}
+                                </table>
+                            `;
+                        } else {
+                            dropdown.innerHTML = `<p style="color: red;">Error fetching bidder details.</p>`;
+                        }
+                    });
+            }
+
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</head>
+<body>
+    <%- include('head') %> <!-- Sidebar & Header -->
+
+    <div class="admin-container">
+        <main class="main-content">
+            <h1 class="admin-title">Manage Bids</h1>
+
+            <table border="1" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Bid ID</th>
+                        <th>Product Name</th>
+                        <th>Bidder Name</th>
+                        <th>Bid Amount</th>
+                        <th>Bid Time</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% bids.forEach(bid => { %>
+                        <tr>
+                            <td><%= bid.bid_id %></td>
+                            <td>
+                                <button onclick="toggleBidderDetails('<%= bid.product_id %>')">
+                                    <%= bid.product_name %> ⬇
+                                </button>
+                            </td>
+                            <td><%= bid.bidder_name %></td>
+                            <td><%= bid.bid_amount %></td>
+                            <td><%= new Date(bid.bid_time).toLocaleString() %></td>
+                            <td>
+                                <div id="bidder-details-<%= bid.product_id %>" class="dropdown-details"></div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <style>
+        .dropdown-details {
+            display: none;
+            margin-top: 5px;
+        }
+        .bidder-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        .bidder-table th, .bidder-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .bidder-table th {
+            background: #f4f4f4;
+        }
+    </style>
+</body>
+</html>

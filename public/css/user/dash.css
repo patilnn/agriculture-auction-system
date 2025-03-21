@@ -11,22 +11,25 @@ body {
     align-items: center;
 }
 
+/* Main container */
 .main {
-    margin-top: 5rem;
+    width: 100%;
+    max-width: 1100px; /* Narrower layout */
+    margin-top: 4rem;
 }
 
 /* Dashboard container */
 .dashboard-container {
-    margin-top: 2rem;
+    margin-top: 1rem;
     background: #fff;
-    padding: 30px;
+    padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     animation: fadeIn 0.8s ease-in-out;
 }
 
-/* Stats container */
+/* Stats container - restored previous layout */
 .stats-container {
     display: flex;
     justify-content: space-around;
@@ -68,9 +71,138 @@ body {
     margin: 0;
 }
 
-.canvas {
-    margin-top: 2rem;
+/* Flex Container */
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
 }
+
+/* Product Tracking (Chart) */
+.canvas {
+    flex: 1;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 500px;
+    text-align: center;
+}
+
+/* Notification Container */
+.notification-container {
+    width: 300px;
+    min-height: 378px;
+    max-height: 378px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+}
+
+/* Scrollbar */
+.notification-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.notification-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.notification-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Notification Item */
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+/* Highlight Unread Notifications */
+.notification-item.new {
+    background-color: #e8f4ff;
+    border-left: 4px solid #007bff;
+    padding-left: 8px;
+}
+
+/* Button Container */
+.notification-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 5px;
+}
+
+/* Button Styles */
+.notification-actions button {
+    flex: 1;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+/* Mark as Read Button */
+.mark-read-btn {
+    background: #28a745; /* Green */
+    color: white;
+}
+
+.mark-read-btn:hover {
+    background: #218838;
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #dc3545; /* Red */
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .flex {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .canvas, .notification-container {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .notification-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .notification-actions button {
+        flex: unset;
+        width: 48%;
+    }
+}
+
 /* Fade-in animation */
 @keyframes fadeIn {
     from {

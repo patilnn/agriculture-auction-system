@@ -116,36 +116,42 @@
     text-align: left;
 }
 
+
+
+
 /* Sidebar */
 .sidebar {
     position: fixed;
     left: -200px;
     top: 50px;
-    height: calc(100% - 50px);
+    height: calc(100% - 50px); /* Full height minus the header */
     width: 180px;
     background: var(--secondary-color);
     box-shadow: 4px 0 6px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    overflow-y: auto; /* Allow scrolling if needed */
     transition: left 0.3s ease-in-out;
     z-index: 1000;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Ensures logout button is pushed down */
+    justify-content: space-between; /* Pushes the logout button to the bottom */
     padding: 0.8rem;
 }
 
-/* Sidebar links */
+/* Sidebar list items */
 .sidebar ul {
     list-style: none;
-    flex: 1;
+    flex-grow: 1; /* Pushes logout button down */
 }
 
+/* Sidebar items */
 .sidebar ul li {
     margin: 0.6rem 0;
 }
 
+/* Sidebar links */
 .sidebar ul li a {
     text-decoration: none;
-    color:white;
+    color: white;
     font-size: 0.9rem;
     font-weight: 500;
     display: block;
@@ -159,30 +165,39 @@
     color: white;
 }
 
-/* Sidebar Open */
-.sidebar.open {
-    left: 0;
+/* Logout Button Container */
+.logout-container {
+    margin-top: auto; /* Ensures it's at the bottom */
+    padding-top: 10px;
 }
 
 /* Logout Button */
-.logout-form {
-    margin-top: auto;
-}
-
 .logout-form button {
     width: 100%;
-    background: var(--hover-color);
+    background: #4b93f9;
     color: white;
     border: none;
-    padding: 0.5rem;
-    font-size: 0.9rem;
+    padding: 0.6rem;
+    font-size: 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s;
 }
 
+/* Logout Button */
+.logout-form {
+    margin-top: auto; /* Pushes the logout button to the bottom */
+    padding-top: 10px;
+    text-align: center;
+}
+
 .logout-form button:hover {
     background: #2c69d1;
+}
+
+/* Sidebar Open */
+.sidebar.open {
+    left: 0;
 }
 
 /* Responsive Design */

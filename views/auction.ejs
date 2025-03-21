@@ -4,6 +4,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/auction.css">
+    <script>
+        function redirectToLogin() {
+            alert("Login is necessary for bidding in the auction.");
+            window.location.href = "/authUser/login";
+        }
+    </script>
     <header class="header-container">
         <div class="container">
           <img src="../img/logo1.jpg" alt="Logo" class="logo">
@@ -21,38 +27,28 @@
 <body>
     <main>
         <div class="app">
-            <h1>Auction Page</h1>
-            <p>Details of current auctions.</p>
-            
+            <h1>Current Auctions</h1>
+            <p>Browse and participate in live auctions.</p>
+
             <% if (error) { %>
                 <p class="error-message"><%= error %></p>
             <% } %>
 
             <% if (products.length > 0) { %>
-                <table class="auction-table">
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Description</th>
-                            <th>Starting Price</th>
-                            <th>Seller</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% products.forEach(product => { %>
-                            <tr>
-                                <td><%= product.product_name %></td>
-                                <td><%= product.description %></td>
-                                <td>$<%= product.starting_price %></td>
-                                <td><%= product.seller_name %></td>
-                                <td>
-                                    <button class="btn-participate">Participate</button>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
+                <div class="auction-container">
+                    <% products.forEach(product => { %>
+                        <div class="auction-card">
+                            <img src="<%= product.image_url ? '/img2/' + product.image_url : '/img/default-image.jpg' %>" 
+                            alt="<%= product.product_name %>" class="product-image">
+                                                   <h3><%= product.product_name %></h3>
+                            <p><%= product.description %></p>
+                            <p><strong>Starting Price:</strong> $<%= product.starting_price %></p>
+                            <p><strong>Current Highest Bid:</strong> $<%= product.highest_bid || product.starting_price %></p>
+                            <p><strong>Seller:</strong> <%= product.seller_name %></p>
+                            <button class="btn-participate" onclick="redirectToLogin()">Participate</button>
+                        </div>
+                    <% }) %>
+                </div>
             <% } else { %>
                 <p class="no-products">No products available for auction.</p>
             <% } %>

@@ -1,5 +1,6 @@
 <!-- views/user/head.ejs -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <header class="fixed-header">
     <button id="sidebarToggle" class="toggle-button">&#9776;</button>
 
@@ -16,7 +17,6 @@
     </div>
 </header>
 
-<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <ul id="sidebar-options">
         <li><a href="/">Home</a></li>
@@ -24,14 +24,20 @@
         <li><a href="/userDashboard/user/make_auction">Make Auction</a></li>
         <li><a href="/userDashboard/user/See_auction">My Listings</a></li>
         <li><a href="/userDashboard/user/auctions">Place a Bid</a></li>
-        <li><a href="/userDashboard/user/bids">Paticipated Auction</a></li>
+        <li><a href="/userDashboard/user/bids">Participated Auction</a></li>
         <li><a href="/userDashboard/user/public_bid">View Public Bids</a></li>
         <li><a href="/userDashboard/user/profile">Profile</a></li>
     </ul>
-    <form action="/userDashboard/logout" method="POST" class="logout-form">
-        <button type="submit">Logout</button>
-    </form>
+
+    <!-- Logout button container -->
+    <div class="logout-container">
+        <form class="logout-form" action="/userDashboard/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
 </div>
+
+<div id="user-info" data-user-id="<%= id %>" style="display: none;"></div>
 
 <!-- Inline JavaScript -->
 <script>
@@ -63,5 +69,15 @@
             }
         });
     });
-</script>
 
+    // Function to load pages without reloading (AJAX navigation)
+    function loadPage(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("main-content").innerHTML = html; // Load new content
+                window.history.pushState({}, "", url); // Update URL without reloading
+            })
+            .catch(error => console.error("Error loading page:", error));
+    }
+</script>

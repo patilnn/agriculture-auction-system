@@ -24,6 +24,7 @@
                     <tr>
                         <th>Product Name</th>
                         <th>Description</th>
+                        <th>quantity</th>
                         <th>Starting Price</th>
                         <th>Reserve Price</th>
                         <th>Category</th>
@@ -38,6 +39,7 @@
                         <tr>
                             <td><%= auction.product_name %></td>
                             <td><%= auction.description %></td>
+                            <td><%= auction.quantity %></td>
                             <td>₹<%= auction.starting_price %></td>
                             <td><%= auction.reserve_price ? `₹${auction.reserve_price}` : 'N/A' %></td>
                             <td><%= auction.category_name || 'Uncategorized' %></td>
@@ -75,6 +77,7 @@
                     <tr>
                         <th>Product Name</th>
                         <th>Description</th>
+                        <th>quantity</th>
                         <th>Starting Price</th>
                         <th>Reserve Price</th>
                         <th>Category</th>
@@ -89,6 +92,7 @@
                         <tr>
                             <td><%= auction.product_name %></td>
                             <td><%= auction.description %></td>
+                            <td><%= auction.quantity %></td>
                             <td>₹<%= auction.starting_price %></td>
                             <td><%= auction.reserve_price ? `₹${auction.reserve_price}` : 'N/A' %></td>
                             <td><%= auction.category_name || 'Uncategorized' %></td>
@@ -102,7 +106,7 @@
                                 <% } %>
                             </td>
                             <td class="action-buttons">
-                                <a href="/auction-result/<%= auction.product_id %>" class="result-btn">View Result</a>
+                                <a href="/userDashboard/user/auction-result/<%= auction.product_id %>" class="result-btn">View Result</a>
                             </td>
                         </tr>
                     <% }); %>

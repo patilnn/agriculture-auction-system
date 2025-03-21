@@ -1,11 +1,35 @@
+<!DOCTYPE html>
+<html>
 <head>
     <title>Admin Dashboard | Auction System</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/Admin_dashboard.css">
+    <!-- Load dashboard-specific styles -->
+    <!-- <link rel="stylesheet" href="/css/admin/admin_dashboard.css"> -->
+    <!-- Load shared sidebar and header styles -->
+    <link rel="stylesheet" href="/css/admin/head.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-    <!-- Include the dashboard header -->
-    <%- include('/pro2/views/admin/head') %>
+<body class="admin-body">
+    <% title = "Admin Dashboard"; %>
+    <%- include("/pro2/views/admin/head") %>  <!-- Includes Sidebar and Header -->
 
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1 class="admin-title">Welcome to Admin Panel</h1>
+            
+            <!-- Dashboard Stats -->
+            <div class="dashboard-stats">
+                <div class="dashboard-card users">
+                    <h3>Total Users</h3>
+                    <p><%= totalUsers %></p>
+                </div>
+                <div class="dashboard-card products">
+                    <h3>Total Products</h3>
+                    <p><%= totalProducts %></p>
+                </div>
+            </div>
+        </main>
+    </div>
 </body>
 </html>

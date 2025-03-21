@@ -1,137 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="/css/user/dash.css">
-    <link rel="stylesheet" href="/css/user/head.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="/css/user/dash.css">
+  <link rel="stylesheet" href="/css/user/head.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <!-- Include the dashboard header -->
-    <%- include('/pro2/views/user/head') %>
+  <!-- Include the dashboard header -->
+  <%- include('/pro2/views/user/head') %>
 
-    <div class="main" id="main-content">
-        <h1>Welcome to Your Dashboard</h1>
-        
-        <!-- Auction Stats -->
-        <div class="dashboard-container">
-            <div class="stats-container">
-                <div class="stat-box">
-                    <h2>Total Auctions Created</h2>
-                    <p><%= totalAuctions %></p>
-                </div>
-                <div class="stat-box">
-                    <h2>Active Auctions</h2>
-                    <p><%= activeAuctions %></p>
-                </div>
-                <div class="stat-box">
-                    <h2>Past Auctions</h2>
-                    <p><%= pastAuctions %></p>
-                </div>
-            </div>
+  <div class="main" id="main-content">
+    <h1>Welcome to Your Dashboard</h1>
+    
+    <!-- Auction Stats -->
+    <div class="dashboard-container">
+      <div class="stats-container">
+        <div class="stat-box">
+          <h2>Total Auctions Created</h2>
+          <p><%= totalAuctions %></p>
         </div>
-        
-        <div class="canvas">
-            <h1>Product Trackings</h1>
-            <!-- Hidden Data to Store Auction Results -->
-            <div id="auctionData" data-auctions='<%- JSON.stringify(auctionResults || []) %>'></div>
+        <div class="stat-box">
+          <h2>Active Auctions</h2>
+          <p><%= activeAuctions %></p>
+        </div>
+        <div class="stat-box">
+          <h2>Past Auctions</h2>
+          <p><%= pastAuctions %></p>
+        </div>
+        <div class="stat-box">
+          <h2>participated Auctions</h2>
+          <p><%= participatedAuctions %></p>
+        </div>
+      </div>
+    </div>
 
-            <!-- Chart Container -->
-            <div style="width: 100%; max-width: 800px; height: 400px;">
-                <canvas id="auctionChart"></canvas>
-            </div>
-        </div>        
-    </div> <!-- Main Content End -->
+    <div class="flex">
+      <!-- Auction Tracking Section -->
+      <div class="canvas">
+        <h1>Product Trackings</h1>
+        <div id="auctionData" data-auctions='<%- JSON.stringify(auctionResults || []) %>'></div>
+        <div style="width: 100%; max-width: 700px; height: 300px;">
+          <canvas id="auctionChart"></canvas>
+        </div>
+      </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Retrieve auction data from hidden div
-            const auctionDataElement = document.getElementById("auctionData");
-            const auctionResults = JSON.parse(auctionDataElement.getAttribute("data-auctions"));
+       <!-- Notification Section -->
+      <div class="notification-container">
+        <h3>Notifications</h3>
+        <% if (notifications && notifications.length > 0) { %>
+          <% notifications.forEach(function(notification) { %>
+            <div class="notification-item <%= notification.read_status ? '' : 'new' %>">
+              <div class="notification-title">Notification</div>
+              <p><%= notification.message %></p>
+              <small><%= new Date(notification.created_at).toLocaleString() %></small>
+            
+              <div class="notification-actions">
+                <% if (!notification.read_status) { %>
+                  <form action="/userDashboard/mark_notification_read" method="POST">
+                    <input type="hidden" name="notificationId" value="<%= notification.notification_id %>">
+                    <button type="submit" class="mark-read-btn">Mark as Read</button>
+                  </form>
+                <% } %>
+            
+                <form action="/userDashboard/delete_notification" method="POST">
+                  <input type="hidden" name="notificationId" value="<%= notification.notification_id %>">
+                  <button type="submit" class="delete-btn">Delete</button>
+                </form>
+              </div>
+            </div>            
+          <% }); %>
+        <% } else { %>
+          <p>No notifications.</p>
+        <% } %>
+      </div>
+    </div> <!-- End flex -->
+  </div> <!-- Main Content End -->
 
-            if (auctionResults.length > 0) {
-                const ctx = document.getElementById('auctionChart').getContext('2d');
-
-                // Extract Data
-                const productNames = auctionResults.map(a => a.product_name);
-                const startingPrices = auctionResults.map(a => a.starting_price);
-                const reservePrices = auctionResults.map(a => a.reserve_price);
-                const highestBids = auctionResults.map(a => a.highest_bid);
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: productNames,
-                        datasets: [
-                            {
-                                label: 'Starting Price ($)',
-                                data: startingPrices,
-                                borderColor: 'blue',
-                                backgroundColor: 'rgba(0, 0, 255, 0.2)',
-                                fill: true
-                            },
-                            {
-                                label: 'Reserve Price ($)',
-                                data: reservePrices,
-                                borderColor: 'red',
-                                backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                                fill: true
-                            },
-                            {
-                                label: 'Highest Bid ($)',
-                                data: highestBids,
-                                borderColor: 'green',
-                                backgroundColor: 'rgba(0, 255, 0, 0.2)',
-                                fill: true
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Auction Prices Overview',
-                                font: {
-                                    size: 18
-                                },
-                                padding: {
-                                    top: 10,
-                                    bottom: 10
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Products'
-                                },
-                                ticks: {
-                                    autoSkip: false,
-                                    maxRotation: 45,
-                                    minRotation: 45
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Price ($)'
-                                },
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            } else {
-                console.log("No auction data found.");
-            }
-        });
-    </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Retrieve auction data from hidden div
+      const auctionDataElement = document.getElementById("auctionData");
+      const auctionResults = JSON.parse(auctionDataElement.getAttribute("data-auctions"));
+  
+      if (auctionResults.length > 0) {
+          const ctx = document.getElementById('auctionChart').getContext('2d');
+  
+          // Extract Data
+          const productNames = auctionResults.map(a => a.product_name);
+          const startingPrices = auctionResults.map(a => a.starting_price);
+          const reservePrices = auctionResults.map(a => a.reserve_price);
+          const highestBids = auctionResults.map(a => a.highest_bid);
+  
+          new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: productNames,
+                  datasets: [
+                      {
+                          label: 'Starting Price ($)',
+                          data: startingPrices,
+                          borderColor: 'blue',
+                          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                          fill: true
+                      },
+                      {
+                          label: 'Reserve Price ($)',
+                          data: reservePrices,
+                          borderColor: 'red',
+                          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                          fill: true
+                      },
+                      {
+                          label: 'Highest Bid ($)',
+                          data: highestBids,
+                          borderColor: 'green',
+                          backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                          fill: true
+                      }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                      title: {
+                          display: true,
+                          text: 'Auction Prices Overview',
+                          font: {
+                              size: 18
+                          },
+                          padding: {
+                              top: 10,
+                              bottom: 10
+                          }
+                      }
+                  },
+                  scales: {
+                      x: {
+                          title: {
+                              display: true,
+                              text: 'Products'
+                          },
+                          ticks: {
+                              autoSkip: false,
+                              maxRotation: 0,
+                              minRotation: 0
+                          }
+                      },
+                      y: {
+                          title: {
+                              display: true,
+                              text: 'Price ($)'
+                          },
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
+      } else {
+          console.log("No auction data found.");
+      }
+    });
+  </script>
 
 </body>
 </html>

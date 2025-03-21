@@ -1,9 +1,9 @@
 // routes/userDash.js
-const express = require('express');
-const db = require('../db'); // Database connection
-const path = require('path');
-const multer = require('multer');
+const express = require("express");
 const router = express.Router();
+const db = require("../config/db");
+const multer = require("multer");
+const path = require("path");
 
 const profileCheck = require('../middleware/profileCheck')
 
@@ -20,8 +20,8 @@ router.get('/',(req,res)=>{
     });
 })
 
-// Render User Dashboard with Chart Data
-router.get("/user/dashboard_user", async (req, res) => {
+// Render User Dashboard with Chart Data & Notifications
+router.get("/user/dashboard_user", profileCheck, async (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login');
 
     try {
@@ -30,59 +30,40 @@ router.get("/user/dashboard_user", async (req, res) => {
 
         const currentDateTime = new Date();
 
-        // Queries for auction stats
-        const totalQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id = ?`;
-        const activeQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id = ? AND auction_start_date <= ? AND auction_end_date >= ?`;
-        const pastQuery = `SELECT COUNT(*) AS total FROM products WHERE seller_id = ? AND auction_end_date < ?`;
+        // Fetch different auction statistics
+        const totalResult = await queryAsync("SELECT COUNT(*) AS total FROM products WHERE seller_id = ?", [userId]);
+        const activeResult = await queryAsync("SELECT COUNT(*) AS total FROM products WHERE seller_id = ? AND auction_start_date <= ? AND auction_end_date >= ?", [userId, currentDateTime, currentDateTime]);
+        const pastResult = await queryAsync("SELECT COUNT(*) AS total FROM products WHERE seller_id = ? AND auction_end_date < ?", [userId, currentDateTime]);
 
-        // Query for product and bid data
-        const auctionDataQuery = `
+        // Fetch auctions user has participated in
+        const participatedResult = await queryAsync(`SELECT COUNT(*) AS total FROM bids WHERE bidder_id = ?`, [userId]);
+
+        // Fetch auction results including highest bid
+        const auctionResults = await queryAsync(`
             SELECT p.product_name, p.starting_price, p.reserve_price, 
                    COALESCE(MAX(b.bid_amount), 0) AS highest_bid
             FROM products p
             LEFT JOIN bids b ON p.product_id = b.product_id
             WHERE p.seller_id = ?
             GROUP BY p.product_id
-        `;
+        `, [userId]);
 
-        db.query(totalQuery, [userId], (err, totalResult) => {
-            if (err) {
-                console.error("Database error:", err);
-                return res.status(500).send("Database error");
-            }
+        // Fetch user notifications
+        const notifications = await queryAsync(`
+            SELECT * FROM Notifications WHERE user_id = ? AND deleted = FALSE ORDER BY created_at DESC`, [userId]);
 
-            db.query(activeQuery, [userId, currentDateTime, currentDateTime], (err, activeResult) => {
-                if (err) {
-                    console.error("Database error:", err);
-                    return res.status(500).send("Database error");
-                }
-
-                db.query(pastQuery, [userId, currentDateTime], (err, pastResult) => {
-                    if (err) {
-                        console.error("Database error:", err);
-                        return res.status(500).send("Database error");
-                    }
-
-                    db.query(auctionDataQuery, [userId], (err, auctionResults) => {
-                        if (err) {
-                            console.error("Database error:", err);
-                            return res.status(500).send("Database error");
-                        }
-
-                        //console.log("Auction Data:", auctionResults); // Debugging output
-
-                        res.render("user/dashboard_user", {
-                            id: req.session.userId,
-                            name: req.session.userName,
-                            totalAuctions: totalResult[0]?.total || 0,
-                            activeAuctions: activeResult[0]?.total || 0,
-                            pastAuctions: pastResult[0]?.total || 0,
-                            auctionResults: auctionResults || []
-                        });
-                    });
-                });
-            });
+        // Render the user dashboard
+        res.render("user/dashboard_user", {
+            id: req.session.userId,
+            name: req.session.userName,
+            totalAuctions: totalResult[0]?.total || 0,
+            activeAuctions: activeResult[0]?.total || 0,
+            pastAuctions: pastResult[0]?.total || 0,
+            participatedAuctions: participatedResult[0]?.total || 0, // 🆕 Added count
+            auctionResults: auctionResults || [],
+            notifications: notifications || [],
         });
+
     } catch (error) {
         console.error("Server error:", error);
         res.status(500).send("Internal Server Error");
@@ -90,22 +71,54 @@ router.get("/user/dashboard_user", async (req, res) => {
 });
 
 
+router.post("/mark_notification_read", async (req, res) => {
+    if (!req.session.isUser) return res.status(401).json({ error: "Unauthorized" });
+
+    const { notificationId } = req.body;
+    if (!notificationId) return res.status(400).json({ error: "Notification ID is required" });
+
+    try {
+        const result = await queryAsync("UPDATE Notifications SET read_status = 1 WHERE notification_id = ?", [notificationId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Notification not found or already read" });
+        }
+
+        res.redirect("/userDashboard/user/dashboard_user"); // ✅ Redirect back to the dashboard after marking as read
+    } catch (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: "Database error" });
+    }
+});
+
+router.post('/delete_notification', async (req, res) => {
+    const { notificationId } = req.body;
+
+    if (!notificationId) {
+        return res.status(400).send("Invalid notification ID");
+    }
+
+    try {
+        await queryAsync('UPDATE Notifications SET deleted = TRUE WHERE notification_id = ?', [notificationId]);
+        res.redirect('/userDashboard/user/dashboard_user');
+    } catch (err) {
+        console.error('Error deleting notification:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
-// Fetch Categories Function
-const fetchCategories = () => {
-    return new Promise((resolve, reject) => {
-        const query = 'SELECT category_id, category_name FROM categories';
-        db.query(query, (err, results) => {
-            if (err) {
-                console.error('Error fetching categories:', err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
+// Fetch Categories Function (Promisified)
+const fetchCategories = async () => {
+    try {
+        const categories = await queryAsync('SELECT category_id, category_name FROM categories');
+        return categories;
+    } catch (err) {
+        console.error('Error fetching categories:', err);
+        return [];
+    }
 };
+
 // Promisified query function
 function queryAsync(sql, params) {
     return new Promise((resolve, reject) => {
@@ -116,17 +129,44 @@ function queryAsync(sql, params) {
     });
 }
 
-// Render Make Auction page with categories
+// Set up storage for uploaded images
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../img2')); // Specify folder to save images
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Set unique file name
+    }
+});
+
+// File filter to allow only images
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Only JPEG, PNG, and JPG images are allowed"), false);
+    }
+};
+
+// Initialize multer middleware
+const upload = multer({ 
+    storage: storage, 
+    fileFilter: fileFilter 
+});
+
+// Render Make Auction Page
 router.get('/user/make_auction', profileCheck, async (req, res) => {
-    if (!req.session.isUser) return res.redirect('/authUser/login'); // Check session
+    if (!req.session.isUser) return res.redirect('/authUser/login');
+
     try {
-        const categories = await fetchCategories(); // Get categories using the utility function
+        const categories = await fetchCategories();
         res.render('user/make_auction', {
             id: req.session.userId,
             name: req.session.userName,
             categories: categories,
-            message: undefined, // No success message for initial page load
-            error: undefined // No error for initial page load
+            message: undefined,
+            error: undefined
         });
     } catch (err) {
         console.error('Error fetching categories:', err);
@@ -139,20 +179,11 @@ router.get('/user/make_auction', profileCheck, async (req, res) => {
         });
     }
 });
-// Set up storage for uploaded images
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '../img2')); // Specify folder to save images
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname)); // Set unique file name
-    }
-});
-// Initialize multer middleware
-const upload = multer({ storage: storage });
-// Route to add a category
-router.post('/user/make_auction', upload.single('image'), async (req, res) => {
-    if (!req.session.isUser) return res.redirect('/authUser/login'); // Check session
+
+// Handle Auction & Category Form Submission
+router.post('/user/make_auction', profileCheck, upload.single('image'), async (req, res) => {
+    if (!req.session.isUser) return res.redirect('/authUser/login');
+
     const { form_type } = req.body;
 
     if (form_type === 'category') {
@@ -160,21 +191,11 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
         const { category_name, description } = req.body;
 
         try {
-            const query = 'INSERT INTO categories (category_name, description) VALUES (?, ?)';
-            await new Promise((resolve, reject) => {
-                db.query(query, [category_name, description], (err, result) => {
-                    if (err) reject(err);
-                    else resolve(result);
-                });
-            });
-
-            // Fetch updated categories
-            const categories = await fetchCategories();
-
+            await queryAsync('INSERT INTO categories (category_name, description) VALUES (?, ?)', [category_name, description]);
             res.render('user/make_auction', {
                 id: req.session.userId,
                 name: req.session.userName,
-                categories: categories,
+                categories: await fetchCategories(),
                 message: 'Category added successfully.',
                 error: undefined
             });
@@ -189,16 +210,27 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
             });
         }
     } else if (form_type === 'product') {
-        const { product_name, Product_description, starting_price, reserve_price, auction_start_date, auction_end_date, category_id } = req.body;
+        // Extract auction details
+        const { product_name, Product_description, starting_price, reserve_price, auction_start_date, auction_end_date, category_id, quantity, } = req.body;
         const image = req.file ? req.file.filename : null;
         const seller_id = req.session.userId;
-    
-        // Convert dates to JS Date objects
+
+        // Ensure the user uploaded an image
+        if (!image) {
+            return res.render('user/make_auction', {
+                id: req.session.userId,
+                name: req.session.userName,
+                categories: await fetchCategories(),
+                message: undefined,
+                error: 'Product image is required!'
+            });
+        }
+
+        // Validate auction dates
         const now = new Date();
         const startDate = new Date(auction_start_date);
         const endDate = new Date(auction_end_date);
-    
-        // Validation for past dates
+
         if (startDate < now) {
             return res.render('user/make_auction', {
                 id: req.session.userId,
@@ -208,7 +240,7 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
                 error: 'Auction start date cannot be in the past.'
             });
         }
-    
+
         if (endDate <= startDate) {
             return res.render('user/make_auction', {
                 id: req.session.userId,
@@ -218,13 +250,15 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
                 error: 'Auction end date must be after the start date.'
             });
         }
-    
+
         try {
+            // Insert the new auction into the database
             const query = `
             INSERT INTO products 
-            (product_name, description, starting_price, reserve_price, auction_start_date, auction_end_date, category_id, image_url, seller_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    
+            (product_name, description, starting_price, reserve_price, auction_start_date, 
+            auction_end_date, category_id, image_url, seller_id, quantity) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
             await queryAsync(query, [
                 product_name,
                 Product_description,
@@ -235,15 +269,19 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
                 category_id,
                 image,
                 seller_id,
+                quantity
             ]);
-    
+
+            console.log("✅ Auction created successfully!");
+
             res.render('user/make_auction', {
                 id: req.session.userId,
                 name: req.session.userName,
                 categories: await fetchCategories(),
-                message: 'Product added successfully.',
-                error: undefined,
+                message: 'Product added successfully!',
+                error: undefined
             });
+
         } catch (err) {
             console.error('Error adding product:', err);
             res.render('user/make_auction', {
@@ -251,11 +289,11 @@ router.post('/user/make_auction', upload.single('image'), async (req, res) => {
                 name: req.session.userName,
                 categories: await fetchCategories(),
                 message: undefined,
-                error: 'An error occurred while adding the product. Please try again.',
+                error: 'An error occurred while adding the product. Please try again.'
             });
         }
     }
-});        
+});
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Route to display user's created auctions
@@ -271,7 +309,7 @@ router.get('/user/See_auction', profileCheck, async (req, res) => {
         const query = `
             SELECT p.product_id, p.product_name, p.description, p.starting_price, 
                    p.reserve_price, p.image_url, p.auction_start_date, p.auction_end_date, 
-                   c.category_name, p.created_at
+                   c.category_name, p.created_at, p.quantity
             FROM Products p
             LEFT JOIN Categories c ON p.category_id = c.category_id
             WHERE p.seller_id = ?
@@ -299,7 +337,8 @@ router.get('/user/See_auction', profileCheck, async (req, res) => {
 router.get('/user/edit_auction/:productId', profileCheck, async (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login');
 
-    const auctionId = req.params.id;
+    const auctionId = req.params.productId;
+
     try {
         const query = `SELECT * FROM products WHERE product_id = ? AND seller_id = ?`;
         const auction = await queryAsync(query, [auctionId, req.session.userId]);
@@ -327,27 +366,29 @@ router.get('/user/edit_auction/:productId', profileCheck, async (req, res) => {
 router.post('/user/edit_auction/:productId', upload.single('image'), async (req, res) => {
     if (!req.session.isUser) return res.redirect('/authUser/login');
 
-    const auctionId = req.params.id;
-    const { product_name, Product_description, starting_price, reserve_price, auction_start_date, auction_end_date, category_id } = req.body;
+    const auctionId = req.params.productId;
+    
+    const { product_name, Product_description, quantity, starting_price, reserve_price, auction_start_date, auction_end_date, category_id } = req.body;
     const image = req.file ? req.file.filename : req.body.old_image; // Keep old image if no new one uploaded
 
     try {
         const query = `
             UPDATE products 
-            SET product_name = ?, description = ?, starting_price = ?, reserve_price = ?, 
-                auction_start_date = ?, auction_end_date = ?, category_id = ?, image_url = ? 
+            SET product_name = ?, description = ?, starting_price = ?, reserve_price = ?,
+                auction_start_date = ?, auction_end_date = ?, category_id = ?, image_url = ?, quantity = ?
             WHERE product_id = ? AND seller_id = ?
         `;
 
         await queryAsync(query, [
             product_name,
-            Product_description,
+            Product_description, // Ensure this matches DB column name (`description`)
             starting_price,
             reserve_price,
             auction_start_date,
             auction_end_date,
             category_id,
             image,
+            quantity, // Move quantity here before auctionId
             auctionId,
             req.session.userId
         ]);
@@ -375,6 +416,14 @@ router.post('/user/delete_auction/:id', profileCheck, async (req, res) => {
     }
 });
 
+router.get('/user/auction-result/:id', (req, res) => {
+    if(!req.session.isUser) return res.redirect('/authUser/login');
+    res.render('user/public_bid', {
+        id: req.session.userId,
+        name: req.session.userName
+    });    
+});
+
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Route to display logged-in user's auctions where at least one bidder participated
 router.get('/user/public_bid', profileCheck, (req, res) => {
@@ -383,7 +432,7 @@ router.get('/user/public_bid', profileCheck, (req, res) => {
     // SQL query to get auctions created by the logged-in user that have at least one bid
     const auctionQuery = `
         SELECT DISTINCT p.product_id, p.product_name, p.description, p.starting_price, 
-               p.reserve_price, p.auction_end_date, p.image_url, u.name AS seller_name
+               p.reserve_price, p.quantity, p.auction_end_date, p.image_url, u.name AS seller_name
         FROM products p
         JOIN bids b ON p.product_id = b.product_id
         JOIN users u ON p.seller_id = u.id
@@ -452,13 +501,17 @@ router.get('/user/auctions', profileCheck, (req, res) => {
     
     // Query to fetch auctions for the current page
     const auctionQuery = `
-        SELECT p.product_id, p.product_name, p.description, p.starting_price, p.reserve_price, 
-               p.auction_end_date, p.image_url, u.name AS seller_name
-        FROM products p
-        JOIN users u ON p.seller_id = u.id
-        WHERE p.seller_id != ?
-        ORDER BY p.auction_end_date ASC
-        LIMIT ? OFFSET ?`;
+    SELECT p.product_id, p.product_name, p.description, p.starting_price, p.reserve_price, 
+           p.auction_end_date, p.image_url, p.quantity, u.name AS seller_name,
+           EXISTS (
+               SELECT 1 FROM bids b WHERE b.product_id = p.product_id AND b.bidder_id = ?
+           ) AS has_bid
+    FROM products p
+    JOIN users u ON p.seller_id = u.id
+    WHERE p.seller_id != ?
+    ORDER BY p.auction_end_date ASC
+    LIMIT ? OFFSET ?`;
+
 
     // First, get the total number of auctions
     db.query(countQuery, [userId], (err, countResults) => {
@@ -471,21 +524,19 @@ router.get('/user/auctions', profileCheck, (req, res) => {
         const totalPages = Math.ceil(totalAuctions / limit); // Calculate total number of pages
 
         // Then, fetch the auctions for the current page
-        db.query(auctionQuery, [userId, limit, offset], (err, results) => {
+        db.query(auctionQuery, [userId, userId, limit, offset], (err, results) => {
             if (err) {
                 console.log(err);
                 return res.status(500).send('Database Error');
             }
-
-            // Render the auctions page with pagination data
+        
             res.render('user/auctions', {
                 id: userId,
                 auctions: results,
                 currentPage: page,
                 totalPages: totalPages,
-                id: req.session.userId, 
                 name: req.session.userName
-            });
+            });        
         });
     });
 });
@@ -498,7 +549,7 @@ router.get('/user/place-bid/:id', profileCheck, (req, res) => {
     // Fetch auction details along with the highest bid
     const auctionQuery = `
         SELECT p.product_id, p.product_name, p.description, p.starting_price, p.reserve_price, 
-               p.auction_end_date, p.image_url, u.name AS seller_name,
+               p.auction_end_date, p.image_url, p.quantity, u.name AS seller_name,
                (SELECT MAX(bid_amount) FROM Bids WHERE product_id = p.product_id) AS highest_bid
         FROM products p
         JOIN users u ON p.seller_id = u.id
@@ -583,6 +634,7 @@ router.get('/user/bids', profileCheck, (req, res) => {
             b.bid_time, 
             p.auction_end_date, 
             p.image_url, 
+            p.quantity,
             u.name AS seller_name,
             (SELECT MAX(bid_amount) FROM bids WHERE product_id = p.product_id) AS highest_bid
         FROM bids b

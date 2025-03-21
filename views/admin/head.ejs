@@ -3,50 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title><%= title || "Admin Panel" %></title>
+    
+    <!-- External CSS (shared styles) -->
     <link rel="stylesheet" href="/css/admin/head.css">
+    
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
     <div class="admin-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>Admin Panel</h2>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-toggle" id="toggleSidebar">☰</span>
+                <h2>Admin Panel</h2>
+            </div>
             <ul>
-                <li><a href="/AdminDash/admin/dashboard_admin">Dashboard</a></li>
-                <li><a href="/admin/auctions">Auctions</a></li>
-                <li><a href="/admin/users">Users</a></li>
-                <li><a href="/admin/products">Products</a></li>
-                <li><a href="/admin/bids">Bids</a></li>
-                <li><a href="/admin/payments">Payments</a></li>
-                <li><a href="/admin/reports">Reports</a></li>
-                <li><a href="/admin/support">Support</a></li>
-                <li><a href="/admin/settings">Settings</a></li>
-            </ul>
+                <li><a href="/AdminDash/admin/dashboard_admin">🏠 Dashboard</a></li>
+                <li><a href="/AdminDash/admin/users">👥 Users</a></li> 
+                <li><a href="/AdminDash/admin/products">📦 Products</a></li>
+                <li><a href="/AdminDash/admin/bids">💰 Bids</a></li> <!-- Added 💰 icon -->
+                <li><a href="/AdminDash/admin/payments">💳 Payments</a></li>
+                <li><a href="/AdminDash/admin/reports">📊 Reports</a></li>
+                <li><a href="/AdminDash/admin/support">🛠 Support</a></li>
+                <li><a href="/AdminDash/admin/settings">⚙️ Settings</a></li>
+            </ul>            
+            
         </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <header>
-                <div class="admin-header">
-                    <div class="user-icon" id="userIcon">👤</div>
-                    <div class="admin-dropdown" id="adminDropdown">
-                        <p>Admin Name: <%= name %></p>
-                        <p>Email: <%= email %></p>
-                        <form action="/AdminDash/logout" method="POST">
-                            <button type="submit">Logout</button>
-                        </form>
-                    </div>
-                </div>
-            </header>
-        </main>
+    
+        <!-- Header -->
+        <header class="admin-header">
+            <h1 class="admin-title">Welcome to Admin Panel</h1>
+            <div class="user-icon" id="userIcon">👤</div>
+            <div class="admin-dropdown" id="adminDropdown">
+                <p>Admin ID: <%= id %></p>
+                <p>Admin Name: <%= name %></p>
+                <form action="/AdminDash/logout" method="POST">
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </header>
     </div>
-
+    
     <script>
         $(document).ready(function() {
+            // Toggle user dropdown menu
             $('#userIcon').click(function() {
-                $('#adminDropdown').toggle();
+                $('#adminDropdown').toggleClass('active');
+            });
+
+            // Sidebar Toggle
+            $('#toggleSidebar').click(function() {
+                $('.sidebar').toggleClass('collapsed');
+                $('.main-content').toggleClass('collapsed');
+                $('.admin-header').toggleClass('collapsed');
+            });
+
+            // Load users page when clicking "Users" in sidebar
+            $('#usersLink').click(function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                window.location.href = '/admin/users'; // Redirect to users page
             });
         });
     </script>

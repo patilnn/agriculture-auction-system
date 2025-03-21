@@ -1,6 +1,8 @@
 // public/routes/mainRoutes.js
 const express = require('express');
-const db = require('../db'); // Database connection
+const db = require('../config/db'); // Database connection
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const router = express.Router();
 
@@ -23,39 +25,62 @@ router.get('/', (req, res) => {
   });
 });
 
+// Configure Nodemailer transporter (without .env)
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Change as per your email provider
+    auth: {
+        user: process.env.USER_EMAIL, // Replace with your actual email
+        pass: process.env.USER_PASS // Replace with your actual password (not recommended for production)
+    }
+});
 
 router.post('/', (req, res) => {
-  const { name, email, location, subject, msg } = req.body;
+    const { name, email, location, subject, msg } = req.body;
 
-  // Validate input
-  if (!name || !email || !msg) {
-      return res.render('index', { 
-          error: 'Name, Email, and msg are required fields!', 
-          message: undefined 
-      });
-  }
+    if (!name || !email || !msg) {
+        return res.render('index', { 
+            error: 'Name, Email, and Message are required fields!', 
+            message: undefined 
+        });
+    }
 
-  const query = `
-      INSERT INTO contactus (name, email, location, subject, msg) 
-      VALUES (?, ?, ?, ?, ?)
-  `;
+    const query = `
+        INSERT INTO contactus (name, email, location, subject, msg) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
-  // Execute the query
-  db.query(query, [name, email, location, subject, msg], (err, results) => {
-      if (err) {
-          console.error(err);
-          return res.render('index', { 
-              error: 'An error occurred while processing your request. Please try again.', 
-              message: undefined 
-          });
-      }
+    db.query(query, [name, email, location, subject, msg], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.render('index', { 
+                error: 'An error occurred while processing your request. Please try again.', 
+                message: undefined 
+            });
+        }
 
-      // Success response
-      res.render('index', { 
-          error: undefined, 
-          message: 'Your message has been sent successfully!' 
-      });
-  });
+        // Send confirmation email
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: email,
+            subject: 'Thank you for contacting us!',
+            text: `Hello ${name},\n\nWe have received your message:\n"${msg}"\n\nWe will get back to you soon.\n\nBest regards,\nAgricultural Auction System`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error(error);
+                return res.render('index', { 
+                    error: 'Your message was saved, but we could not send a confirmation email.', 
+                    message: undefined 
+                });
+            }
+
+            res.render('index', { 
+                error: undefined, 
+                message: 'Your message has been sent successfully!' 
+            });
+        });
+    });
 });
 
 // Auction Page

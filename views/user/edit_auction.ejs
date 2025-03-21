@@ -27,6 +27,9 @@
 
             <label>Description:</label>
             <textarea name="Product_description" required><%= auction.description %></textarea>
+            
+            <label>quantity:</label>
+            <input type="number" name="quantity" value="<%= auction.quantity %>" required>
 
             <label>Starting Price:</label>
             <input type="number" name="starting_price" value="<%= auction.starting_price %>" required>
